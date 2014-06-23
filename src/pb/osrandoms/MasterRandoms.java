@@ -1,7 +1,7 @@
-package master.nex;
+package pb.osrandoms;
 
-import master.nex.core.GraphScript;
-import master.nex.randoms.StrangePlant;
+import pb.osrandoms.core.GraphScript;
+import pb.osrandoms.randoms.StrangePlant;
 import org.powerbot.script.Script;
 import org.powerbot.script.rt4.ClientContext;
 

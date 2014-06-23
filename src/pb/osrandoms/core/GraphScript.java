@@ -1,4 +1,4 @@
-package master.nex.core;
+package pb.osrandoms.core;
 
 import java.util.Deque;
 import java.util.Iterator;

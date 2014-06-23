@@ -1,6 +1,6 @@
-package master.nex.randoms;
+package pb.osrandoms.randoms;
 
-import master.nex.core.GraphScript;
+import pb.osrandoms.core.GraphScript;
 import org.powerbot.script.Condition;
 import org.powerbot.script.Filter;
 import org.powerbot.script.rt4.ClientContext;
