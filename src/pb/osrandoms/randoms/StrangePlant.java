@@ -26,14 +26,15 @@ public class StrangePlant extends GraphScript.Action<RandomContext> {
         return ctx.randomMethods.getNpc(new Filter<Npc>() {
             @Override
             public boolean accept(Npc npc) {
-                return Arrays.binarySearch(FALSE_ANIMATIONS, npc.animation()) > -1;
+                return Arrays.binarySearch(FALSE_ANIMATIONS, npc.animation()) > -1 &&
+                        npc.interacting().equals(ctx.players.local());
             }
         }, PLANT_NAME);
     }
 
     @Override
     public boolean valid() {
-        return getPlant().id() != -1;
+        return getPlant().valid();
     }
 
     @Override
@@ -43,7 +44,7 @@ public class StrangePlant extends GraphScript.Action<RandomContext> {
             Condition.wait(new Callable<Boolean>() {
                 @Override
                 public Boolean call() throws Exception {
-                    return getPlant().id() == -1;
+                    return !getPlant().valid();
                 }
             }, 250, 10);
         } else {
