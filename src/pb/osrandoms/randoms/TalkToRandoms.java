@@ -15,7 +15,7 @@ import java.util.concurrent.Callable;
  */
 public class TalkToRandoms extends GraphScript.Action<RandomContext> {
 
-    private final String[] RANDOM_NPC_NAMES = {"Security gaurd", "Genie"};
+    private final String[] RANDOM_NPC_NAMES = {"Security gaurd", "Genie", "Cap'n Hand", "Rick Turpertine"};
     private final int WIDGET_ID = -1;
     private final int COMPONENT_ID = -1;
 
@@ -44,7 +44,7 @@ public class TalkToRandoms extends GraphScript.Action<RandomContext> {
                 }
             }, 100, 7);
         } else {
-            if (random.inViewport() && random.interact("Pick", random.name())) {
+            if (random.inViewport() && random.interact("Talk-to", random.name())) {
                 Condition.wait(new Callable<Boolean>() {
                     @Override
                     public Boolean call() throws Exception {
