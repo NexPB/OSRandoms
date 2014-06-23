@@ -8,7 +8,7 @@ import org.powerbot.script.rt4.ClientContext;
 import java.util.Arrays;
 
 @Script.Manifest(
-        name = "MasterRandoms",
+        name = "Randoms",
         description = "Sloves randoms to bot 24/7.",
         properties = "topic=-1;client=4"
 )
