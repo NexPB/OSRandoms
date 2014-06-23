@@ -1,13 +1,11 @@
 package pb.osrandoms.randoms;
 
 import org.powerbot.script.Condition;
-import org.powerbot.script.Filter;
-import org.powerbot.script.rt4.ClientContext;
 import org.powerbot.script.rt4.Component;
 import org.powerbot.script.rt4.Npc;
 import pb.osrandoms.core.GraphScript;
+import pb.osrandoms.core.RandomContext;
 
-import java.util.Arrays;
 import java.util.concurrent.Callable;
 
 /**
@@ -15,13 +13,13 @@ import java.util.concurrent.Callable;
  * - NPC names (randoms) that only need talking.
  * - getContinue widget
  */
-public class TalkToRandoms extends GraphScript.Action<ClientContext> {
+public class TalkToRandoms extends GraphScript.Action<RandomContext> {
 
-    private final String[] RANDOM_NPC_NAMES = {"Security gaurd"};
+    private final String[] RANDOM_NPC_NAMES = {"Security gaurd", "Genie"};
     private final int WIDGET_ID = -1;
     private final int COMPONENT_ID = -1;
 
-    public TalkToRandoms(ClientContext ctx) {
+    public TalkToRandoms(RandomContext ctx) {
         super(ctx);
     }
 
@@ -29,23 +27,14 @@ public class TalkToRandoms extends GraphScript.Action<ClientContext> {
         return ctx.widgets.widget(WIDGET_ID).component(COMPONENT_ID);
     }
 
-    public Npc getRandom() {
-        return ctx.npcs.select().name(RANDOM_NPC_NAMES).select(new Filter<Npc>() {
-            @Override
-            public boolean accept(Npc npc) {
-                return npc.interacting().equals(ctx.players.local());
-            }
-        }).poll();
-    }
-
     @Override
     public boolean valid() {
-        return getRandom().id() != -1;
+        return ctx.randomMethods.getNpc(RANDOM_NPC_NAMES).id() != -1;
     }
 
     @Override
     public void run() {
-        final Npc random = getRandom();
+        final Npc random = ctx.randomMethods.getNpc(RANDOM_NPC_NAMES);
         final Component cont = getContinue();
         if (cont.valid() && cont.visible() && cont.click()) {
             Condition.wait(new Callable<Boolean>() {
