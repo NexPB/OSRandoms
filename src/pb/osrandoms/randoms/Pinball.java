@@ -3,23 +3,15 @@ package pb.osrandoms.randoms;
 import org.powerbot.script.Condition;
 import org.powerbot.script.Random;
 import org.powerbot.script.Tile;
-import org.powerbot.script.rt4.Component;
-import org.powerbot.script.rt4.GameObject;
-import org.powerbot.script.rt4.Menu;
-import org.powerbot.script.rt4.Player;
+import org.powerbot.script.rt4.*;
 import pb.osrandoms.core.GraphScript;
 import pb.osrandoms.core.RandomContext;
 
 import java.util.concurrent.Callable;
 
-/**
- * TODO:
- * - Ensure cave exit works
- * - Post bounds
- */
 public class Pinball extends GraphScript.Action<RandomContext> {
 	private static final Tile[] TILES = new Tile[]{new Tile(47, 54, 0), new Tile(49, 57, 0), new Tile(52, 58, 0), new Tile(55, 57, 0), new Tile(57, 54, 0)};
-	private static final int[] POST_BOUNDS = {-1, -1, -1, -1, -1, -1};
+	private static final int[] POST_BOUNDS = {-60, 60, -60, 60, 0, 800};
 
 	public Pinball(RandomContext ctx) {
 		super(ctx);
@@ -59,7 +51,7 @@ public class Pinball extends GraphScript.Action<RandomContext> {
 					ctx.camera.pitch(20 + Random.nextInt(5, 20));
 				}
 
-				if (exit.interact("Exit")) { // Check this works, could be a "Exit cave, Exit" or something
+				if (exit.interact("Exit")) {
 					Condition.wait(new Callable<Boolean>() {
 						@Override
 						public Boolean call() throws Exception {
@@ -86,9 +78,7 @@ public class Pinball extends GraphScript.Action<RandomContext> {
 	}
 
 	private GameObject post() {
-		final GameObject post = ctx.objects.select().at(tile()).name("Pinball post").poll();
-		post.bounds(POST_BOUNDS);
-		return post;
+		return ctx.objects.select().at(tile()).name("Pinball post").each(Interactive.doSetBounds(POST_BOUNDS)).poll();
 	}
 
 	private int score() {
