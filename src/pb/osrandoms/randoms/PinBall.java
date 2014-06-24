@@ -78,7 +78,7 @@ public class PinBall extends GraphScript.Action<RandomContext> {
 			Condition.wait(new Callable<Boolean>() {
 				@Override
 				public Boolean call() throws Exception {
-					return scoreBefore != score() && ctx.players.local().animation() == -1;
+					return scoreBefore != score();
 				}
 			}, 200, 15);
 		}
