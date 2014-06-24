@@ -71,6 +71,7 @@ public class Pinball extends GraphScript.Action<RandomContext> {
 
 				ctx.movement.step(exit);
 			}
+			return;
 		}
 
 		final GameObject post = post();
