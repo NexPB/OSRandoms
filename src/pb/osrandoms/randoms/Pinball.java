@@ -17,11 +17,11 @@ import java.util.concurrent.Callable;
  * - Ensure cave exit works
  * - Post bounds
  */
-public class PinBall extends GraphScript.Action<RandomContext> {
+public class Pinball extends GraphScript.Action<RandomContext> {
 	private static final Tile[] TILES = new Tile[]{new Tile(47, 54, 0), new Tile(49, 57, 0), new Tile(52, 58, 0), new Tile(55, 57, 0), new Tile(57, 54, 0)};
 	private static final int[] POST_BOUNDS = {-1, -1, -1, -1, -1, -1};
 
-	public PinBall(RandomContext ctx) {
+	public Pinball(RandomContext ctx) {
 		super(ctx);
 	}
 
