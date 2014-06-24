@@ -50,7 +50,7 @@ public class Pinball extends GraphScript.Action<RandomContext> {
 
 		final int scoreBefore = score();
 		if (scoreBefore >= 10) {
-			final GameObject exit = ctx.objects.select().name("Exit", "Cave Exit").nearest().poll();
+			final GameObject exit = ctx.objects.select().name("Cave Exit").nearest().poll();
 			if (exit.valid()) {
 				if (!exit.inViewport()) {
 					ctx.camera.turnTo(exit);
