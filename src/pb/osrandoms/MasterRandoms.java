@@ -1,13 +1,14 @@
 package pb.osrandoms;
 
+import java.util.Arrays;
+
+import org.powerbot.script.Script;
+
 import pb.osrandoms.core.GraphScript;
 import pb.osrandoms.core.RandomContext;
+import pb.osrandoms.randoms.ExpRewardClaimer;
 import pb.osrandoms.randoms.StrangePlant;
-import org.powerbot.script.Script;
-import org.powerbot.script.rt4.ClientContext;
 import pb.osrandoms.randoms.TalkToRandoms;
-
-import java.util.Arrays;
 
 @Script.Manifest(
         name = "Randoms",
@@ -17,7 +18,7 @@ import java.util.Arrays;
 public class MasterRandoms extends GraphScript<RandomContext> {
 
     public MasterRandoms() {
-        chain.addAll(Arrays.asList(new StrangePlant(ctx), new TalkToRandoms(ctx)));
+        chain.addAll(Arrays.asList(new StrangePlant(ctx), new ExpRewardClaimer(ctx), new TalkToRandoms(ctx)));
     }
 
 }
