@@ -3,10 +3,7 @@ package pb.osrandoms.randoms;
 import org.powerbot.script.Condition;
 import org.powerbot.script.Random;
 import org.powerbot.script.Tile;
-import org.powerbot.script.rt4.Component;
-import org.powerbot.script.rt4.GameObject;
-import org.powerbot.script.rt4.Menu;
-import org.powerbot.script.rt4.Player;
+import org.powerbot.script.rt4.*;
 import pb.osrandoms.core.GraphScript;
 import pb.osrandoms.core.RandomContext;
 
