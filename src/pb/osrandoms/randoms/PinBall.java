@@ -1,7 +1,6 @@
 package pb.osrandoms.randoms;
 
 import org.powerbot.script.Condition;
-import org.powerbot.script.Filter;
 import org.powerbot.script.Random;
 import org.powerbot.script.Tile;
 import org.powerbot.script.rt4.Component;
@@ -94,17 +93,7 @@ public class PinBall extends GraphScript.Action<RandomContext> {
 	}
 
 	private GameObject pillar() {
-		return ctx.objects.select().at(tile()).select(new Filter<GameObject>() {
-			@Override
-			public boolean accept(GameObject gameObject) {
-				for (String action : gameObject.actions()) {
-					if (action.contains("Tag")) {
-						return true;
-					}
-				}
-				return false;
-			}
-		}).poll();
+		return ctx.objects.select().at(tile()).name("Pinball post").poll();
 	}
 
 	private int score() {
