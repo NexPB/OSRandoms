@@ -10,15 +10,16 @@ import org.powerbot.script.rt4.Player;
 import pb.osrandoms.core.GraphScript;
 import pb.osrandoms.core.RandomContext;
 
-import java.awt.*;
 import java.util.concurrent.Callable;
 
 /**
  * TODO:
  * - Ensure cave exit works
+ * - Post bounds
  */
 public class PinBall extends GraphScript.Action<RandomContext> {
 	private static final Tile[] TILES = new Tile[]{new Tile(47, 54, 0), new Tile(49, 57, 0), new Tile(52, 58, 0), new Tile(55, 57, 0), new Tile(57, 54, 0)};
+	private static final int[] POST_BOUNDS = {-1, -1, -1, -1, -1, -1};
 
 	public PinBall(RandomContext ctx) {
 		super(ctx);
@@ -47,7 +48,8 @@ public class PinBall extends GraphScript.Action<RandomContext> {
 			return;
 		}
 
-		if (score() >= 10) {
+		final int scoreBefore = score();
+		if (scoreBefore >= 10) {
 			final GameObject exit = ctx.objects.select().name("Exit", "Cave Exit").nearest().poll();
 			if (exit.valid()) {
 				if (!exit.inViewport()) {
@@ -71,29 +73,21 @@ public class PinBall extends GraphScript.Action<RandomContext> {
 			}
 		}
 
-		final GameObject pillar = pillar();
-		int tries = 1;
-		while (tries < 10) {
-			final Tile location = pillar.tile();
-			final Point point = location.matrix(ctx).point(0.5, 0.5, 200);
-			if (ctx.input.move(point.x + Random.nextInt(tries, tries * 2) - tries * 2, point.y + Random.nextInt(tries, tries * 2) - tries * 2)) {
-				Condition.sleep(100);
-				if (ctx.menu.indexOf(Menu.filter("Tag")) > -1 && ctx.menu.click(Menu.filter("Tag"))) {
-					Condition.wait(new Callable<Boolean>() {
-						@Override
-						public Boolean call() throws Exception {
-							return pillar() != pillar;
-						}
-					}, 200, 15);
-					return;
+		final GameObject post = post();
+		if (post.interact("Tag")) {
+			Condition.wait(new Callable<Boolean>() {
+				@Override
+				public Boolean call() throws Exception {
+					return scoreBefore != score() && ctx.players.local().animation() == -1;
 				}
-			}
-			tries++;
+			}, 200, 15);
 		}
 	}
 
-	private GameObject pillar() {
-		return ctx.objects.select().at(tile()).name("Pinball post").poll();
+	private GameObject post() {
+		final GameObject post = ctx.objects.select().at(tile()).name("Pinball post").poll();
+		post.bounds(POST_BOUNDS);
+		return post;
 	}
 
 	private int score() {
