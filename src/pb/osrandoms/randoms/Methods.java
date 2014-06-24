@@ -58,7 +58,6 @@ public class Methods extends ClientAccessor {
 				}
 			}
 		}
-
 		return ctx.widgets.widget(0).component(0);
 	}
 }
