@@ -54,7 +54,7 @@ public class Pinball extends GraphScript.Action<RandomContext> {
 					ctx.camera.pitch(20 + Random.nextInt(5, 20));
 				}
 
-				if (exit.interact("Exit")) { // Check this works, could be a "Exit cave, Exit" or something
+				if (exit.interact("Exit")) {
 					Condition.wait(new Callable<Boolean>() {
 						@Override
 						public Boolean call() throws Exception {
