@@ -1,4 +1,4 @@
-package pb.osrandoms.randoms;
+package pb.osrandoms.core;
 
 import org.powerbot.script.Filter;
 import org.powerbot.script.rt4.*;
