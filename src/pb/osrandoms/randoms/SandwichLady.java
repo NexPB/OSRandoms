@@ -14,99 +14,100 @@ import java.util.concurrent.Callable;
  * - Make sure modelids are right!
  */
 public class SandwichLady extends OSRandom {
+	public SandwichLady(RandomContext ctx) {
+		super(ctx);
+	}
 
-    public SandwichLady(RandomContext ctx) {
-        super(ctx);
-    }
+	@Override
+	public void run() {
+		final Component component = getComponent();
+		if (component.valid()) {
+			status("Interface open sandwich lady.");
+			for (final Answer answer : Answer.values()) {
+				final Component food;
+				if ((food = answer.getAnswer(ctx, component.widget())).valid()) {
+					status("Found answer food = " + answer);
+					target.set(food);
+					food.click();
+					Condition.wait(new Callable<Boolean>() {
+						@Override
+						public Boolean call() throws Exception {
+							return !getComponent().valid();
+						}
+					}, 250, 10);
+				}
+			}
+		} else {
+			final Component cont = ctx.randomMethods.getContinue();
+			if (cont.valid()) {
+				status("Talk to sandwich lady.");
+				target.set(cont);
+				cont.click();
+				Condition.sleep(1600);
+			} else {
+				final Npc lady = ctx.randomMethods.getNpc("Sandwich Lady");
+				status("Interact with sandwich lady.");
+				target.set(lady);
+				if (lady.inViewport() && lady.interact("Talk-to", lady.name())) {
+					Condition.wait(new Callable<Boolean>() {
+						@Override
+						public Boolean call() throws Exception {
+							return getComponent().valid();
+						}
+					}, 250, 10);
+				} else {
+					status("Walk to sandwich lady.");
+					ctx.movement.step(lady);
+				}
+			}
+		}
+	}
 
-    public enum Answer {
+	private Component getComponent() {
+		for (Answer answer : Answer.values()) {
+			return ctx.randomMethods.getComponentByText(answer.getName());
+		}
+		return ctx.widgets.widget(0).component(0);
+	}
 
-        SQUARE(10731, "square"),
-        ROLL(10727, "roll"),
-        CHOCOLATE(10728, "chocolate"),
-        BAQUETTE(10726, "baquette"),
-        TRIANGLE(10732, "triangle"),
-        KEBAB(10729, "kebab"),
-        PIE(10730, "pie");
+	@Override
+	public boolean valid() {
+		return ctx.randomMethods.getNpc("Sandwich Lady").valid() || getComponent().valid();
+	}
 
-        private int modelId;
-        private String name;
+	public enum Answer {
+		SQUARE(10731, "square"),
+		ROLL(10727, "roll"),
+		CHOCOLATE(10728, "chocolate"),
+		BAQUETTE(10726, "baquette"),
+		TRIANGLE(10732, "triangle"),
+		KEBAB(10729, "kebab"),
+		PIE(10730, "pie");
 
-        Answer(final int modelId, final String name) {
-            this.modelId = modelId;
-            this.name = name;
-        }
+		private int modelId;
+		private String name;
 
-        public int getModelId() {
-            return modelId;
-        }
+		Answer(final int modelId, final String name) {
+			this.modelId = modelId;
+			this.name = name;
+		}
 
-        public String getName() {
-            return name;
-        }
+		public int getModelId() {
+			return modelId;
+		}
 
-        public Component getAnswer(final RandomContext ctx, final Widget widget) {
-            for (int i = 1; i < 8; i++) {
-                Component component = widget.component(i);
-                if (component.valid() && component.modelId() == getModelId()) {
-                    return component;
-                }
-            }
-            return ctx.widgets.widget(0).component(0);
-        }
-    }
+		public String getName() {
+			return name;
+		}
 
-    private Component getComponent() {
-        for (Answer answer : Answer.values()) {
-            return ctx.randomMethods.getComponentByText(answer.getName());
-        }
-        return ctx.widgets.widget(0).component(0);
-    }
-
-    @Override
-    public boolean valid() {
-        return ctx.randomMethods.getNpc("Sandwich Lady").valid() || getComponent().valid();
-    }
-
-    @Override
-    public void run() {
-        final Component component = getComponent();
-        if (component.valid()) {
-            status("interace open sandwich lady.");
-            for (final Answer answer : Answer.values()) {
-                final Component food;
-                if ((food = answer.getAnswer(ctx, component.widget())).valid()) {
-                    status("found answer food = " + food);
-                    food.click();
-                    Condition.wait(new Callable<Boolean>() {
-                        @Override
-                        public Boolean call() throws Exception {
-                            return !getComponent().valid();
-                        }
-                    }, 250, 10);
-                }
-            }
-        } else {
-            final Component cont = ctx.randomMethods.getContinue();
-            if (cont.valid()) {
-                status("talk to sandwich lady.");
-                cont.click();
-                Condition.sleep(1600);
-            } else {
-                status("interact with sandwich lady.");
-                final Npc lady = ctx.randomMethods.getNpc("Sandwich Lady");
-                if (lady.inViewport() && lady.interact("Talk-to", lady.name())) {
-                    Condition.wait(new Callable<Boolean>() {
-                        @Override
-                        public Boolean call() throws Exception {
-                            return getComponent().valid();
-                        }
-                    }, 250, 10);
-                } else {
-                    status("walk to sandwich lady.");
-                    ctx.movement.step(lady);
-                }
-            }
-        }
-    }
+		public Component getAnswer(final RandomContext ctx, final Widget widget) {
+			for (int i = 1; i < 8; i++) {
+				Component component = widget.component(i);
+				if (component.valid() && component.modelId() == getModelId()) {
+					return component;
+				}
+			}
+			return ctx.widgets.widget(0).component(0);
+		}
+	}
 }
