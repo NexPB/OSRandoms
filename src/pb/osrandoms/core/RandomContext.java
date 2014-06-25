@@ -1,7 +1,6 @@
 package pb.osrandoms.core;
 
 import org.powerbot.script.rt4.ClientContext;
-import pb.osrandoms.randoms.Methods;
 
 public class RandomContext extends ClientContext {
 
