@@ -40,6 +40,7 @@ public class TalkToRandoms extends OSRandom {
 		final Npc npc = ctx.randomMethods.getNpc(NPC_NAMES);
 		final Component cont = ctx.randomMethods.getContinue();
 		if (cont.valid() && cont.visible()) {
+			status("Talk to " + npc.name().toLowerCase() + ".");
 			target.set(cont);
 			if (cont.click()) {
 				Condition.wait(new Callable<Boolean>() {
@@ -50,6 +51,7 @@ public class TalkToRandoms extends OSRandom {
 				}, 120, 10);
 			}
 		} else {
+			status("Interact with " + npc.name().toLowerCase() + ".");
 			target.set(npc);
 			if (npc.inViewport() && npc.interact("Talk-to", npc.name())) {
 				Condition.wait(new Callable<Boolean>() {
