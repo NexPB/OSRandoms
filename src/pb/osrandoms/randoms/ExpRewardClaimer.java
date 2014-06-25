@@ -3,6 +3,7 @@ package pb.osrandoms.randoms;
 import org.powerbot.script.Condition;
 import org.powerbot.script.rt4.Component;
 import org.powerbot.script.rt4.Game.Tab;
+import org.powerbot.script.rt4.Item;
 import org.powerbot.script.rt4.Menu;
 import pb.osrandoms.core.OSRandom;
 import pb.osrandoms.core.RandomContext;
@@ -24,8 +25,8 @@ public class ExpRewardClaimer extends OSRandom {
 
 	private static Reward selected_reward = null;
 
-	public ExpRewardClaimer(RandomContext script) {
-		super(script);
+	public ExpRewardClaimer(RandomContext ctx) {
+		super(ctx);
 	}
 
 	private Reward getReward() {
@@ -37,6 +38,8 @@ public class ExpRewardClaimer extends OSRandom {
 		final Component comp = ctx.widgets.widget(REWARD_WIDGET_ID).component(getReward().componentId());
 		if (comp.valid()) {
 			if (selectedReward() != getReward().settingValue()) {
+				status("Selecting reward.");
+				target.set(comp);
 				if (comp.interact("advance")) {
 					Condition.wait(new Callable<Boolean>() {
 						@Override
@@ -44,10 +47,11 @@ public class ExpRewardClaimer extends OSRandom {
 							return selectedReward() == getReward().settingValue();
 						}
 					}, 150, 10);
-					return;
 				}
 			} else {
+				status("Confirming reward.");
 				final Component confirm = ctx.randomMethods.getComponentByText("confirm");
+				target.set(confirm);
 				if (confirm.valid() && confirm.interact(Menu.filter("confirm"))) {
 					Condition.wait(new Callable<Boolean>() {
 						@Override
@@ -55,19 +59,20 @@ public class ExpRewardClaimer extends OSRandom {
 							return !comp.valid();
 						}
 					}, 150, 10);
-					return;
 				}
 			}
 		} else {
+			status("Rubbing lamp.");
 			if (ctx.game.tab(Tab.INVENTORY)) {
-				if (ctx.inventory.poll().click()) {
+				final Item item = ctx.inventory.poll();
+				target.set(item);
+				if (item.click()) {
 					Condition.wait(new Callable<Boolean>() {
 						@Override
 						public Boolean call() throws Exception {
 							return comp.valid();
 						}
 					}, 150, 10);
-					return;
 				}
 			}
 		}
