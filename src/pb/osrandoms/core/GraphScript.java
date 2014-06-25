@@ -1,21 +1,14 @@
 package pb.osrandoms.core;
 
-import java.util.Deque;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.NavigableSet;
-import java.util.Queue;
+import org.powerbot.script.*;
+
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import org.powerbot.script.AbstractScript;
-import org.powerbot.script.ClientAccessor;
-import org.powerbot.script.ClientContext;
-import org.powerbot.script.PollingScript;
-import org.powerbot.script.Validatable;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * A scripting framework which organises nodes by a spatial (R-tree) index and follows a two dimensional Z-order curve.
@@ -30,6 +23,7 @@ public abstract class GraphScript<C extends ClientContext> extends PollingScript
     /**
      * The root chain where the node cursor will start.
      */
+    protected final AtomicReference<Action<C>> current = new AtomicReference<Action<C>>();
     protected final NavigableSet<Action<C>> chain;
 
     /**
@@ -51,14 +45,20 @@ public abstract class GraphScript<C extends ClientContext> extends PollingScript
     private void propagate(final Iterable<Action<C>> chain) {
         final AtomicInteger c = new AtomicInteger(0);
         i.push(c);
+        boolean anyEnabled = false;
         for (final Action<C> a : chain) {
             if (a.enabled()) {
+                anyEnabled = true;
+                current.set(a);
                 a.run();
                 propagate(a.chain);
             }
             c.incrementAndGet();
         }
         i.pop();
+        if (!anyEnabled) {
+            current.set(null);
+        }
     }
 
     /**
