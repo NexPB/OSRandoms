@@ -4,12 +4,12 @@ import org.powerbot.script.Condition;
 import org.powerbot.script.Filter;
 import org.powerbot.script.rt4.Component;
 import org.powerbot.script.rt4.Npc;
-import pb.osrandoms.core.GraphScript;
+import pb.osrandoms.core.OSRandom;
 import pb.osrandoms.core.RandomContext;
 
 import java.util.concurrent.Callable;
 
-public class TalkToRandoms extends GraphScript.Action<RandomContext> {
+public class TalkToRandoms extends OSRandom {
 
     private static final String[] NPC_NAMES = {
             "Drunken Dwarf",

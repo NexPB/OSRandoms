@@ -1,9 +1,9 @@
 package pb.osrandoms.randoms;
 
-import pb.osrandoms.core.GraphScript;
 import org.powerbot.script.Condition;
 import org.powerbot.script.Filter;
 import org.powerbot.script.rt4.Npc;
+import pb.osrandoms.core.OSRandom;
 import pb.osrandoms.core.RandomContext;
 
 import java.util.Arrays;
@@ -13,7 +13,7 @@ import java.util.concurrent.Callable;
  * TODO:
  * - Make sure false animations are right
  */
-public class StrangePlant extends GraphScript.Action<RandomContext> {
+public class StrangePlant extends OSRandom {
 
     private final int[] FALSE_ANIMATIONS = {348, 350};
     private final String PLANT_NAME = "Strange plant";

@@ -3,6 +3,7 @@ package pb.osrandoms;
 import org.powerbot.script.PaintListener;
 import org.powerbot.script.Script;
 import pb.osrandoms.core.GraphScript;
+import pb.osrandoms.core.OSRandom;
 import pb.osrandoms.core.RandomContext;
 import pb.osrandoms.randoms.ExpRewardClaimer;
 import pb.osrandoms.randoms.StrangePlant;
@@ -24,9 +25,14 @@ public class MasterRandoms extends GraphScript<RandomContext> implements PaintLi
 
     @Override
     public void repaint(Graphics g) {
-        final Action action = this.current.get();
-        if (action != null && action instanceof PaintListener) {
-            ((PaintListener) action).repaint(g);
+        g.setFont(new Font("Tahoma", 0, 14));
+        final OSRandom action = (OSRandom) this.current.get();
+        if (action != null) {
+            if (action instanceof PaintListener) {
+                ((PaintListener) action).repaint(g);
+            }
+            g.setColor(Color.WHITE);
+            g.drawString(action.status(), 10, 50);
         }
     }
 
