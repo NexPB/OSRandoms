@@ -5,9 +5,7 @@ import org.powerbot.script.Script;
 import pb.osrandoms.core.GraphScript;
 import pb.osrandoms.core.OSRandom;
 import pb.osrandoms.core.RandomContext;
-import pb.osrandoms.randoms.ExpRewardClaimer;
-import pb.osrandoms.randoms.StrangePlant;
-import pb.osrandoms.randoms.TalkToRandoms;
+import pb.osrandoms.randoms.*;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -20,7 +18,7 @@ import java.util.Arrays;
 public class MasterRandoms extends GraphScript<RandomContext> implements PaintListener {
 
     public MasterRandoms() {
-        chain.addAll(Arrays.asList(new StrangePlant(ctx), new ExpRewardClaimer(ctx), new TalkToRandoms(ctx)));
+		chain.addAll(Arrays.asList(new StrangePlant(ctx), new ExpRewardClaimer(ctx), new TalkToRandoms(ctx), new Pinball(ctx), new SandwichLady(ctx)));
     }
 
     @Override
