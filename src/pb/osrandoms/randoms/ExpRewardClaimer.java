@@ -10,6 +10,9 @@ import pb.osrandoms.core.RandomContext;
 import java.util.concurrent.Callable;
 
 /**
+ * TODO:
+ * - Need a way to set selected_reward from script (or track xp and use current training skill)
+ *
  * @author Robert G
  */
 public class ExpRewardClaimer extends OSRandom {
