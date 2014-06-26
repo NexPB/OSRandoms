@@ -16,7 +16,11 @@ public class Mime extends OSRandom {
         super(ctx);
     }
 
-    public Component getComponent(final int anim) {
+    private Npc getMime() {
+        return ctx.npcs.select().name("Mime").within(10).poll();
+    }
+
+    private Component getComponent(final int anim) {
         switch (anim) {
             case 860:
                 return ctx.randomMethods.getComponentByText("Cry");
@@ -40,7 +44,7 @@ public class Mime extends OSRandom {
 
     @Override
     public boolean valid() {
-        return ctx.randomMethods.getNpc("Mime").valid();
+        return getMime().valid();
     }
 
     @Override
@@ -61,7 +65,7 @@ public class Mime extends OSRandom {
                 }
             }
         } else {
-            final Npc mime = ctx.randomMethods.getNpc("Mime");
+            final Npc mime = getMime();
             target.set(mime);
             final int anim = mime.animation();
             status("Checking animation - animation = " + anim);
