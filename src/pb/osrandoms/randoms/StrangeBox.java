@@ -42,6 +42,7 @@ public class StrangeBox extends OSRandom {
 		if (question.valid()) {
 			final Component comp = ctx.widgets.widget(QUESTION_WIDGET_ID).component(answerComponentId());
 			status("[StrangeBox] Selecting " + comp.text() + ".");
+			target.set(comp);
 			if (comp.click()) {
 				Condition.wait(new Callable<Boolean>() {
 
@@ -56,6 +57,7 @@ public class StrangeBox extends OSRandom {
 			status("[StrangeBox] Opening Strange box.");
 			if (ctx.game.tab(Tab.INVENTORY)) {
 				final Item box = ctx.inventory.poll();
+				target.set(box);
 				if (box.interact("open")) {
 					Condition.wait(new Callable<Boolean>() {
 
