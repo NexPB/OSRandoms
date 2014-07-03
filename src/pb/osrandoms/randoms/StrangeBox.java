@@ -38,21 +38,23 @@ public class StrangeBox extends OSRandom {
 	
 	@Override
 	public void run() {
-		if (answerComponentId() > -1) {
+		final Component question = ctx.widgets.widget(QUESTION_WIDGET_ID).component(6);
+		if (question.valid()) {
 			final Component comp = ctx.widgets.widget(QUESTION_WIDGET_ID).component(answerComponentId());
-			status("Selecting " + comp.text() + ".");
+			status("[StrangeBox] Selecting " + comp.text() + ".");
 			target.set(comp);
 			if (comp.click()) {
 				Condition.wait(new Callable<Boolean>() {
 
 					@Override
 					public Boolean call() throws Exception {
-						return answerComponentId() == -1;
+						return !question.valid();
 					}
 					
 				});
 			}
 		} else {
+			status("[StrangeBox] Opening Strange box.");
 			if (ctx.game.tab(Tab.INVENTORY)) {
 				final Item box = ctx.inventory.poll();
 				target.set(box);
@@ -61,7 +63,7 @@ public class StrangeBox extends OSRandom {
 
 						@Override
 						public Boolean call() throws Exception {
-							return answerComponentId() > -1;
+							return question.valid();
 						}
 						
 					});
