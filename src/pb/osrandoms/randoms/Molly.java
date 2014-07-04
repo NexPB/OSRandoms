@@ -53,8 +53,7 @@ public class Molly extends OSRandom {
 	}
 	
 	private Npc suspect() {
-		final Npc npc = ctx.npcs.select().id(mollyID - 40).poll();
-		return npc.valid() ? npc : ctx.npcs.select().id(mollyID - 405).poll();
+		return ctx.npcs.select().id(mollyID - 40).poll();
 	}
 
 	private void navigateClaw() {
@@ -105,14 +104,13 @@ public class Molly extends OSRandom {
 		final GameObject door = objectByName("door");
 		if (door.valid()) {
 			door.bounds(new int[]{60, 80, -232, 0, -44, 68});
-			target.set(door);
-			if (door.inViewport() && door.interact("Open")) {
-				return true;
+			if (door.inViewport()) {
+				target.set(door);
+				return door.interact("Open");
 			}
 			ctx.camera.turnTo(door);
 			if (!door.inViewport()) {
 				if (ctx.randomMethods.walkTileOnScreen(door)) {
-					Condition.sleep(Random.nextInt(800, 1200));
 					return false;
 				}
 			}
@@ -122,20 +120,23 @@ public class Molly extends OSRandom {
 
 	@Override
 	public void run() {
-		if (ctx.randomMethods.clickContinue()) {
+		final Component cont = ctx.randomMethods.getContinue();
+		if (cont.valid()) {
 			status("[Molly] Handling widgets.");
-			Condition.wait(new Callable<Boolean>() {
-
-				@Override
-				public Boolean call() throws Exception {
-					return !ctx.randomMethods.getContinue().valid();
-				}
-
-			});
+			if (cont.click()) {
+				Condition.wait(new Callable<Boolean>() {
+	
+					@Override
+					public Boolean call() throws Exception {
+						return !cont.valid();
+					}
+	
+				});
+			}
 			return;
 		}
 		if (ctx.players.local().inMotion() || ctx.players.local().animation() != -1) {
-			Condition.sleep(600);
+			Condition.sleep(Random.getDelay());
 			return;
 		}
 		final int suspectsLoaded = ctx.npcs.select().name("suspect").size();
@@ -143,16 +144,18 @@ public class Molly extends OSRandom {
 			if (suspectsLoaded == 2) {
 				mollyID = -1;
 				status("[Molly] Talking to Molly.");
-				target.set(molly);
-				if (molly.inViewport() && molly.interact("talk")) {
-					Condition.wait(new Callable<Boolean>() {
-
-						@Override
-						public Boolean call() throws Exception {
-							return ctx.randomMethods.getContinue().valid();
-						}
-
-					});
+				if (molly.inViewport()) {
+					target.set(molly);
+					if (molly.interact("talk")) {
+						Condition.wait(new Callable<Boolean>() {
+	
+							@Override
+							public Boolean call() throws Exception {
+								return ctx.randomMethods.getContinue().valid();
+							}
+	
+						});
+					}
 				} else {
 					ctx.camera.turnTo(molly);
 				}
@@ -161,11 +164,22 @@ public class Molly extends OSRandom {
 					final int id = molly.id();
 					mollyID = id;
 					status("[Molly] Molly ID: " + Integer.toString(id));
-					status("[Molly] Pissible Evil Twin IDs: [" + Integer.toString(mollyID - 40) + ", " + Integer.toString(mollyID - 405) + "]");
+					status("[Molly] Evil Twin ID: " + Integer.toString(mollyID - 40));
 				}
-				if (ctx.randomMethods.getComponentByText("yes, I").click()) {
+				final Component yes = ctx.randomMethods.getComponentByText("yes, I");
+				if (yes.valid()) {
 					status("[Molly] Handling widgets.");
-					Condition.sleep(Random.nextInt(800, 1300));
+					target.set(yes);
+					if (yes.click()) {
+						Condition.wait(new Callable<Boolean>() {
+
+							@Override
+							public Boolean call() throws Exception {
+								return !yes.valid();
+							}
+							
+						});
+					}
 				} else {
 					status("[Molly] Entering control room.");
 					if (openDoor()) {
