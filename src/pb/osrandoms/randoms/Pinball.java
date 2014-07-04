@@ -60,7 +60,7 @@ public class Pinball extends OSRandom {
 				}
 
 				status("Interact with exit.");
-				if (exit.interact("Exit")) {
+				if (exit.click("Exit")) {
 					Condition.wait(new Callable<Boolean>() {
 						@Override
 						public Boolean call() throws Exception {
@@ -69,7 +69,7 @@ public class Pinball extends OSRandom {
 					}, 200, 20);
 					return;
 				}
-
+				
 				ctx.randomMethods.walkTileOnScreen(exit);
 			}
 			return;
