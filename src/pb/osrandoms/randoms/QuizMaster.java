@@ -12,8 +12,8 @@ import java.util.concurrent.Callable;
 public class QuizMaster extends OSRandom {
 
     private final int[][] ANSWERS = {
-            {6190, 6189},
-            {6198, 6197},
+            {6189, 6190},
+            {6197, 6198},
             {6191, 6192},
             {6193, 6194},
             {6195, 6196}
