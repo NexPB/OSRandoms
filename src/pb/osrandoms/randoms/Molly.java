@@ -24,7 +24,7 @@ public class Molly extends OSRandom {
 
 	private Npc molly;
 	private GameObject controlPanel;
-	private int mollyID = -1;
+	private int suspectID = -1;
 
 	public Molly(RandomContext ctx) {
 		super(ctx);
@@ -53,11 +53,11 @@ public class Molly extends OSRandom {
 	}
 	
 	private Npc suspect() {
-		return ctx.npcs.select().id(mollyID - 40).poll();
+		return ctx.npcs.select().id(suspectID).poll();
 	}
 
 	private void navigateClaw() {
-		if (!controllerOpen() || mollyID < 1) {
+		if (!controllerOpen() || suspectID < 1) {
 			return;
 		}
 		GameObject claw;
@@ -140,7 +140,7 @@ public class Molly extends OSRandom {
 		final int suspectsLoaded = ctx.npcs.select().name("suspect").size();
 		if (!inControlRoom()) {
 			if (suspectsLoaded == 2) {
-				mollyID = -1;
+				suspectID = -1;
 				status("[Molly] Talking to Molly.");
 				target.set(molly);
 				if (molly.inViewport() && molly.interact("talk")) {
@@ -156,10 +156,16 @@ public class Molly extends OSRandom {
 					ctx.camera.turnTo(molly);
 				}
 			} else {
-				if (mollyID == -1) {
-					mollyID = molly.id();
-					status("[Molly] Molly ID: " + Integer.toString(mollyID));
-					status("[Molly] Evil Twin ID:" + Integer.toString(mollyID - 40));
+				if (suspectID == -1) {
+					final int id = molly.id();
+					switch (id) {
+					case 4277:
+						suspectID = (id - 405);
+					default:
+						suspectID = (id - 40);
+					}
+					status("[Molly] Molly ID: " + Integer.toString(id));
+					status("[Molly] Evil Twin ID:" + Integer.toString(suspectID));
 				}
 				if (ctx.randomMethods.getComponentByText("yes, I").click()) {
 					status("[Molly] Handling widgets.");
