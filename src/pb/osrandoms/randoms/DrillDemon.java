@@ -13,6 +13,7 @@ import pb.osrandoms.core.RandomContext;
 import java.util.concurrent.Callable;
 
 /**
+ * TODO:
  * Need to test if it picks the correct mat, Exercise.id might be in the reverse order
  * Check it doesn't matter which mat you click on (tile1 or tile2)
  */
