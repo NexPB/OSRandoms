@@ -11,13 +11,12 @@ import java.util.concurrent.Callable;
 
 public class QuizMaster extends OSRandom {
 
-    private final int[][] ANSWERS = {
-            {6189, 6190},
-            {6197, 6198},
-            {6191, 6192},
-            {6193, 6194},
-            {6195, 6196}
-    };
+    private static final int[] FISH = {6189, 6190};
+    private static final int[] WEAPONS = {6191, 6192};
+    private static final int[] ARMOUR = {6193, 6194};
+    private static final int[] FARMING = {6195, 6196};
+    private static final int[] JEWELRY = {6197, 6198};
+    private static final int[][] ANSWERS = {FISH, JEWELRY, WEAPONS, ARMOUR, FARMING};
 
     public QuizMaster(RandomContext ctx) {
         super(ctx);
@@ -49,7 +48,7 @@ public class QuizMaster extends OSRandom {
     public void run() {
         final Component prize = ctx.randomMethods.getComponentByText("1000 Coins");
         if (prize.valid()) {
-            status("Select our prize: 1000 Coins.");
+            status("Select our prize, 1000 Coins.");
             target.set(prize);
             if (prize.click()) {
                 Condition.wait(new Callable<Boolean>() {
@@ -62,7 +61,7 @@ public class QuizMaster extends OSRandom {
         } else {
             final Component answer = getAnswer();
             if (answer.valid()) {
-                status("Clicking answer.");
+                status("Clicking answer: " + answer.text().toLowerCase());
                 target.set(answer);
                 if (answer.click())
                     Condition.sleep(1500);

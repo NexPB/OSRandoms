@@ -10,7 +10,8 @@ import pb.osrandoms.core.RandomContext;
 import java.util.concurrent.Callable;
 
 public class Pinball extends OSRandom {
-	private static final Tile[] TILES = new Tile[]{new Tile(47, 54, 0), new Tile(49, 57, 0), new Tile(52, 58, 0), new Tile(55, 57, 0), new Tile(57, 54, 0)};
+	
+	private static final Tile[] TILES = new Tile[]{ new Tile(47, 54, 0), new Tile(49, 57, 0), new Tile(52, 58, 0), new Tile(55, 57, 0), new Tile(57, 54, 0) };
 	private static final int[] POST_BOUNDS = {-60, 60, -60, 60, 0, 800};
 
 	public Pinball(RandomContext ctx) {
@@ -55,7 +56,7 @@ public class Pinball extends OSRandom {
 					ctx.camera.turnTo(exit);
 				}
 				if (!exit.inViewport()) {
-					ctx.camera.pitch(20 + Random.nextInt(5, 20));
+					ctx.camera.pitch(5 + Random.nextInt(5, 10));
 				}
 
 				status("Interact with exit.");
@@ -76,7 +77,7 @@ public class Pinball extends OSRandom {
 
 		final GameObject post = post();
 		target.set(post);
-		if (post.interact("Tag")) {
+		if (post.click("Tag")) {
 			Condition.wait(new Callable<Boolean>() {
 				@Override
 				public Boolean call() throws Exception {

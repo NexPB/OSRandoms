@@ -32,6 +32,10 @@ public class Methods extends ClientAccessor {
 		return component.valid() && component.click();
 	}
 
+	public boolean queryContinue() {
+		return getContinue().valid();
+	}
+
 	private Component getComponentByText(Component component, String needle) {
 		if (component.text().contains(needle)) {
 			return component;
