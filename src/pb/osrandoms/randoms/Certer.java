@@ -14,28 +14,28 @@ import pb.osrandoms.core.RandomContext;
 public class Certer extends OSRandom {
 	
 	private enum Answer {
-		
-        FISH(8829), 
-        RING(8834), 
-        SWORD(8836),
-        SPADE(8837), 
-        SHIELD(8832),
-        AXE(8828),
-        SHEARS(8835),
-        HELMET(8833);
-        
-        private int model;
 
-        private Answer(int model) {
-            this.model = model;
-        }
+		FISH(8829), 
+		RING(8834), 
+		SWORD(8836),
+		SPADE(8837), 
+		SHIELD(8832),
+		AXE(8828),
+		SHEARS(8835),
+		HELMET(8833);
 
-        private String getName() {
-            return name().substring(0, 1) + name().substring(1).toLowerCase();
-        }
-        
-    }
-	
+		private int model;
+
+		private Answer(int model) {
+			this.model = model;
+		}
+
+		private String getName() {
+			return name().substring(0, 1) + name().substring(1).toLowerCase();
+		}
+
+	}
+
 	private final String[] npcs = { "Niles", "Giles", "Miles" };
 	private final int parent_widget_id = 184;
 	private final int item_component_id = 7;
@@ -46,13 +46,13 @@ public class Certer extends OSRandom {
 					|| arg0.overheadMessage().contains(ctx.players.local().name());
 		}
 	};
-	
+
 	private Npc npc = null;
 
 	public Certer(RandomContext ctx) {
 		super(ctx);
 	}
-	
+
 	private Answer getAnswer(Component c) {
 		for (Answer answer : Answer.values()) {
 			if (answer.model == c.modelId()) {
@@ -61,7 +61,7 @@ public class Certer extends OSRandom {
 		}
 		return null;
 	}
-	
+
 	private Component getAnswerComponent(Answer answer) {
 		final Widget widg = ctx.widgets.widget(parent_widget_id);
 		for (int i = 1; i < 4; i++) {
@@ -72,7 +72,7 @@ public class Certer extends OSRandom {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public void run() {
 		final Component claim = ctx.widgets.widget(242).component(4);
@@ -86,7 +86,7 @@ public class Certer extends OSRandom {
 					public Boolean call() throws Exception {
 						return !npc.valid();
 					}
-					
+
 				});
 			}
 		} else {
@@ -100,12 +100,12 @@ public class Certer extends OSRandom {
 						target.set(answerComponent);
 						if (answerComponent.click()) {
 							Condition.wait(new Callable<Boolean>() {
-	
+
 								@Override
 								public Boolean call() throws Exception {
 									return answerComponent.modelId() != answer.model;
 								}
-								
+
 							});
 						}
 					}
@@ -119,7 +119,7 @@ public class Certer extends OSRandom {
 						public Boolean call() throws Exception {
 							return itemComponent.valid();
 						}
-						
+
 					});
 				}
 			}
