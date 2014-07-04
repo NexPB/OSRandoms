@@ -9,23 +9,35 @@ import pb.osrandoms.core.RandomContext;
 import java.util.Arrays;
 import java.util.concurrent.Callable;
 
-/**
- * User: k0na
- * Date: 04-07-2014
- * Time: 04:33
- */
 public class QuizMaster extends OSRandom {
 
-    private static final int[] FISH = { 6189, 6190 };
-    private static final int[] WEAPONS = { 6191, 6192 };
-    private static final int[] ARMOUR = { 6193, 6194 };
-    private static final int[] FARMING = { 6195, 6196 };
-    private static final int[] JEWELRY = { 6197, 6198 };
-    
-    private static final int[][] ANSWERS = { FISH, JEWELRY, WEAPONS, ARMOUR, FARMING };
+    private final int[][] ANSWERS = {
+            {6190, 6189},
+            {6198, 6197},
+            {6191, 6192},
+            {6193, 6194},
+            {6195, 6196}
+    };
 
     public QuizMaster(RandomContext ctx) {
         super(ctx);
+    }
+
+    private Widget getWidget() {
+        return ctx.randomMethods.getComponentByText("Pick the odd one out.").widget();
+    }
+
+    private Component getAnswer() {
+        final Component[] components = getWidget().components();
+        if (components.length > 0) {
+            for (int[] arr : ANSWERS) {
+                for (Component component : components) {
+                    if (Arrays.binarySearch(arr, component.modelId()) > -1)
+                        return component;
+                }
+            }
+        }
+        return ctx.widgets.widget(0).component(0);
     }
 
     @Override
@@ -35,9 +47,9 @@ public class QuizMaster extends OSRandom {
 
     @Override
     public void run() {
-        final Component prize = randomMethods.getComponentByText("1000 Coins");
+        final Component prize = ctx.randomMethods.getComponentByText("1000 Coins");
         if (prize.valid()) {
-            status("Selecting price, 1000 coins");
+            status("Select our prize: 1000 Coins.");
             target.set(prize);
             if (prize.click()) {
                 Condition.wait(new Callable<Boolean>() {
@@ -49,43 +61,13 @@ public class QuizMaster extends OSRandom {
             }
         } else {
             final Component answer = getAnswer();
-            if (answer != null && answer.valid()) {
-                status("Clicking answer, " + answer.toString());
+            if (answer.valid()) {
+                status("Clicking answer.");
                 target.set(answer);
                 if (answer.click())
                     Condition.sleep(1500);
             }
         }
-    }
-
-    private Component getAnswer() {
-        Widget p = randomMethods.getComponentByText("Pick the odd one out.").widget();
-        for (int[] i : ANSWERS) {
-            if (getCount(i, p) == 1) {
-                for (Component c : p.components()) {
-                    for (int j : i) {
-                        if (j == c.modelId()) {
-                            return c;
-                        }
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    private int getCount(int[] t, Widget p) {
-        int c = 0;
-        if (p.componentCount() > 0) {
-            for (Component component : p.components()) {
-                for (int i : t) {
-                    if (i == component.modelId()) {
-                        c++;
-                    }
-                }
-            }
-        }
-        return c;
     }
 
 }
