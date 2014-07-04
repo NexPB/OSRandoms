@@ -1,6 +1,8 @@
 package pb.osrandoms.core;
 
 import org.powerbot.script.Filter;
+import org.powerbot.script.Locatable;
+import org.powerbot.script.Tile;
 import org.powerbot.script.rt4.*;
 
 public class Methods extends ClientAccessor {
@@ -60,4 +62,28 @@ public class Methods extends ClientAccessor {
 		}
 		return ctx.widgets.widget(0).component(0);
 	}
+	
+	private Tile getTileOnScreen(final Tile tile) {
+		try {
+			if (tile.matrix(ctx).inViewport()) {
+				return tile;
+			} else {
+				final Tile loc = ctx.players.local().tile();
+				final Tile halfWayTile = new Tile((tile.x() + loc.y()) / 2, (tile.x() + loc.y()) / 2);
+				if (halfWayTile.matrix(ctx).inViewport()) {
+					return halfWayTile;
+				} else {
+					return getTileOnScreen(halfWayTile);
+				}
+			}
+		} catch (final Exception e) {
+			return null;
+		}
+	}
+	
+	public boolean walkTileOnScreen(Locatable loc) {
+		final Tile closest = getTileOnScreen(loc.tile());
+		return closest != null ? closest.matrix(ctx).interact("walk") : false;
+	}
+
 }

@@ -69,7 +69,7 @@ public class Pinball extends OSRandom {
 					return;
 				}
 
-				ctx.movement.step(exit);
+				ctx.randomMethods.walkTileOnScreen(exit);
 			}
 			return;
 		}
