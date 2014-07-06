@@ -11,6 +11,12 @@ import org.powerbot.script.rt4.Widget;
 import pb.osrandoms.core.OSRandom;
 import pb.osrandoms.core.RandomContext;
 
+/**
+ * 
+ * @author Robert G
+ *
+ */
+//TODO Not activating for some reason.
 public class Certer extends OSRandom {
 	
 	private enum Answer {
@@ -47,7 +53,7 @@ public class Certer extends OSRandom {
 		}
 	};
 
-	private Npc npc = null;
+	private Npc npc = ctx.npcs.nil();
 
 	public Certer(RandomContext ctx) {
 		super(ctx);
@@ -128,7 +134,7 @@ public class Certer extends OSRandom {
 
 	@Override
 	public boolean valid() {
-		return (npc = ctx.randomMethods.getNpc(npcFilter, npcs)) != null;
+		return (npc = ctx.randomMethods.getNpc(npcFilter, npcs)).valid();
 	}
 
 }

@@ -9,6 +9,7 @@ import pb.osrandoms.core.RandomContext;
 
 import java.util.concurrent.Callable;
 
+//TODO Sometimes tags the wrong post due to the screen changing angle.
 public class Pinball extends OSRandom {
 	
 	private static final Tile[] TILES = new Tile[]{ new Tile(47, 54, 0), new Tile(49, 57, 0), new Tile(52, 58, 0), new Tile(55, 57, 0), new Tile(57, 54, 0) };

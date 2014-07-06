@@ -13,6 +13,12 @@ import org.powerbot.script.rt4.Npc;
 import pb.osrandoms.core.OSRandom;
 import pb.osrandoms.core.RandomContext;
 
+/**
+ * 
+ * @author Robert G
+ *
+ */
+//TODO work on finding correct suspect id.
 public class Molly extends OSRandom {
 
 	private static final int CONTROL_INTERFACEGROUP = 240;

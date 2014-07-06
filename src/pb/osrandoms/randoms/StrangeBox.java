@@ -14,6 +14,7 @@ import pb.osrandoms.core.RandomContext;
  * 
  * @author Robert G
  *
+ *Working fine.
  */
 public class StrangeBox extends OSRandom {
 	private static final int QUESTION_WIDGET_ID = 190;
