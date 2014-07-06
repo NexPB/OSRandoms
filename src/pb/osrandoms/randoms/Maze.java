@@ -21,6 +21,7 @@ import pb.osrandoms.core.RandomContext;
  * @author Timer
  * 
  * Updated by Robert G 6/7/2014
+ * Needs testing and possibly more work.
  *
  */
 public class Maze extends OSRandom {
