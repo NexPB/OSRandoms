@@ -31,8 +31,8 @@ public class Maze extends OSRandom {
 		private final Tile after;
 
 		public Door(int x, int y, final char direction) {
-			x += ctx.client().getOffsetX();
-			y += ctx.client().getOffsetY();
+			x = (x + ctx.client().getOffsetX());
+			y = (x + ctx.client().getOffsetY());
 			this.main = new Tile(x, y, 0);
 			this.direction = direction;
 			switch (direction) {
