@@ -16,6 +16,13 @@ import org.powerbot.script.rt4.GameObject;
 import pb.osrandoms.core.OSRandom;
 import pb.osrandoms.core.RandomContext;
 
+/**
+ * 
+ * @author Timer
+ * 
+ * Updated by Robert G 6/7/2014
+ *
+ */
 public class Maze extends OSRandom {
 
 	private final class Door {
