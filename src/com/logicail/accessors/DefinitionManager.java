@@ -26,7 +26,7 @@ public class DefinitionManager extends ClientAccessor {
 		super(arg0);
 
 		String directory = System.getProperty("user.home") + File.separator + "jagexcache" + File.separator + "oldschool" + File.separator + "LIVE" + File.separator;
-		ctx.controller.script().log.info("Loading cache from: " + directory);
+		//ctx.controller.script().log.info("Loading cache from: " + directory);
 
 		system = new CacheSystem(new File(directory));
 
