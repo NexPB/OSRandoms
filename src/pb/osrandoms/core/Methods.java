@@ -73,7 +73,7 @@ public class Methods extends ClientAccessor {
 				return tile;
 			} else {
 				final Tile loc = ctx.players.local().tile();
-				final Tile halfWayTile = new Tile((tile.x() + loc.y()) / 2, (tile.x() + loc.y()) / 2);
+				final Tile halfWayTile = new Tile((tile.x() + loc.x()) / 2, (tile.y() + loc.y()) / 2);
 				if (halfWayTile.matrix(ctx).inViewport()) {
 					return halfWayTile;
 				} else {

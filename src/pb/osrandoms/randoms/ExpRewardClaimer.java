@@ -15,6 +15,7 @@ import java.util.concurrent.Callable;
  * - Need a way to set selected_reward from script (or track xp and use current training skill)
  *
  * @author Robert G
+ * Tested and working as of 08/07/2014
  */
 public class ExpRewardClaimer extends OSRandom {
 	private static final int REWARD_WIDGET_ID = 134;
@@ -38,9 +39,9 @@ public class ExpRewardClaimer extends OSRandom {
 		final Component comp = ctx.widgets.widget(REWARD_WIDGET_ID).component(getReward().componentId());
 		if (comp.valid()) {
 			if (selectedReward() != getReward().settingValue()) {
-				status("Selecting reward.");
+				status("[RewardClaimer] Selecting reward.");
 				target.set(comp);
-				if (comp.interact("advance")) {
+				if (comp.click(Menu.filter("advance"))) {
 					Condition.wait(new Callable<Boolean>() {
 						@Override
 						public Boolean call() throws Exception {
@@ -49,10 +50,10 @@ public class ExpRewardClaimer extends OSRandom {
 					}, 150, 10);
 				}
 			} else {
-				status("Confirming reward.");
+				status("[RewardClaimer]Confirming reward.");
 				final Component confirm = ctx.randomMethods.getComponentByText("confirm");
 				target.set(confirm);
-				if (confirm.valid() && confirm.interact(Menu.filter("confirm"))) {
+				if (confirm.valid() && confirm.interact(Menu.filter("ok"))) {
 					Condition.wait(new Callable<Boolean>() {
 						@Override
 						public Boolean call() throws Exception {
@@ -62,7 +63,7 @@ public class ExpRewardClaimer extends OSRandom {
 				}
 			}
 		} else {
-			status("Rubbing lamp.");
+			status("[RewardClaimer] Clicking exp item.");
 			if (ctx.game.tab(Tab.INVENTORY)) {
 				final Item item = ctx.inventory.poll();
 				target.set(item);

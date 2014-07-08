@@ -12,6 +12,8 @@ import java.util.concurrent.Callable;
 
 /**
  * @author Robert G
+ * 
+ * Tested working as of 08/07/2014
  */
 public class StrangeBox extends OSRandom {
 	private static final int ANSWER_SETTING_ID = 312;

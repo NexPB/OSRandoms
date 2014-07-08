@@ -7,7 +7,7 @@ import pb.osrandoms.core.OSRandom;
 import pb.osrandoms.core.RandomContext;
 
 import java.util.concurrent.Callable;
-
+//Not working according to user input. No specific details given.
 public class Mime extends OSRandom {
 
     private Component component = null;
