@@ -14,9 +14,10 @@ import pb.osrandoms.core.RandomContext;
 /**
  * 
  * @author Robert G
- *
+ * 
+ * Tested working as of 08/07/2014
+ * 
  */
-//TODO Not activating for some reason.
 public class Certer extends OSRandom {
 	
 	private enum Answer {
@@ -70,10 +71,10 @@ public class Certer extends OSRandom {
 
 	private Component getAnswerComponent(Answer answer) {
 		final Widget widg = ctx.widgets.widget(parent_widget_id);
-		for (int i = 1; i < 4; i++) {
+		for (int i = 1; i < widg.components().length; i++) {
 			final Component comp = widg.component(i);
-			if (comp.modelId() == answer.model) {
-				return widg.component(i + 7);
+			if (comp.text().toLowerCase().contains(answer.getName())) {
+				return widg.component(comp.index() + 7);
 			}
 		}
 		return null;
@@ -81,54 +82,49 @@ public class Certer extends OSRandom {
 
 	@Override
 	public void run() {
-		final Component claim = ctx.widgets.widget(242).component(4);
-		if(claim.valid()) {
-			status("[Certer] Claiming prize.");
-			target.set(claim);
-			if (claim.click()) {
-				Condition.wait(new Callable<Boolean>() {
+		if (ctx.randomMethods.clickContinue()) {
+			Condition.wait(new Callable<Boolean>() {
 
-					@Override
-					public Boolean call() throws Exception {
-						return !npc.valid();
-					}
+				@Override
+				public Boolean call() throws Exception {
+					return !npc.valid();
+				}
+				
+			});
+			return;
+		}
+		final Component itemComponent = ctx.widgets.widget(parent_widget_id).component(item_component_id);
+		if (itemComponent.valid()) {
+			final Answer answer = getAnswer(itemComponent);
+			if (answer != null) {
+				status("[Certer] Selecting " + answer.getName() + ".");
+				final Component answerComponent = getAnswerComponent(answer);
+				if (answerComponent != null) {
+					target.set(answerComponent);
+					if (answerComponent.click()) {
+						Condition.wait(new Callable<Boolean>() {
 
-				});
-			}
-		} else {
-			final Component itemComponent = ctx.widgets.widget(parent_widget_id).component(item_component_id);
-			if (itemComponent.valid()) {
-				final Answer answer = getAnswer(itemComponent);
-				if (answer != null) {
-					status("[Certer] Selecting " + answer.getName() + ".");
-					final Component answerComponent = getAnswerComponent(answer);
-					if (answerComponent != null) {
-						target.set(answerComponent);
-						if (answerComponent.click()) {
-							Condition.wait(new Callable<Boolean>() {
+							@Override
+							public Boolean call() throws Exception {
+								return answerComponent.modelId() != answer.model;
+							}
 
-								@Override
-								public Boolean call() throws Exception {
-									return answerComponent.modelId() != answer.model;
-								}
-
-							});
-						}
+						});
 					}
 				}
-			} else {
-				status("[Certer] Talking to " + npc.name() + ".");
-				if (npc.interact("Talk-to")) {
-					Condition.wait(new Callable<Boolean>() {
-
-						@Override
-						public Boolean call() throws Exception {
-							return itemComponent.valid();
-						}
-
-					});
-				}
 			}
+			return;
+		}
+		status("[Certer] Talking to " + npc.name() + ".");
+		if (npc.interact("Talk-to")) {
+			Condition.wait(new Callable<Boolean>() {
+
+				@Override
+				public Boolean call() throws Exception {
+					return itemComponent.valid();
+				}
+
+			});
 		}
 	}
 
