@@ -1,6 +1,6 @@
 package com.logicail.wrappers;
 
-import com.logicail.script.DefinitionManager;
+import com.logicail.accessors.DefinitionManager;
 import com.sk.datastream.Stream;
 
 /**

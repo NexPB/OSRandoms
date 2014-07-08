@@ -1,7 +1,7 @@
-package com.logicail.script;
+package com.logicail.accessors;
 
+import com.logicail.DefinitionCache;
 import com.logicail.wrappers.*;
-import com.sk.cache.DataSource;
 import com.sk.cache.fs.CacheSystem;
 import org.powerbot.script.rt4.ClientAccessor;
 import org.powerbot.script.rt4.ClientContext;
@@ -24,7 +24,11 @@ public class DefinitionManager extends ClientAccessor {
 
 	public DefinitionManager(ClientContext arg0) throws FileNotFoundException {
 		super(arg0);
-		system = new CacheSystem(new DataSource(new File(System.getProperty("user.home") + File.separator + "jagexcache" + File.separator + "oldschool" + File.separator + "LIVE" + File.separator)));
+
+		String directory = System.getProperty("user.home") + File.separator + "jagexcache" + File.separator + "oldschool" + File.separator + "LIVE" + File.separator;
+		ctx.controller.script().log.info("Loading cache from: " + directory);
+
+		system = new CacheSystem(new File(directory));
 
 		loaderMap.put(NpcDefinition.class, new DefinitionCache<NpcDefinition>(ctx, this, system.npcLoader));
 		loaderMap.put(VarpDefinition.class, new DefinitionCache<VarpDefinition>(ctx, this, system.varpLoader));

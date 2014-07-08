@@ -18,7 +18,7 @@ public abstract class Definition {
 	protected Definition(int id) {
 		this.id = id;
 	}
-	
+
 	protected void decode(Stream stream) {
 		while (true) {
 			int opcode = stream.getUByte();

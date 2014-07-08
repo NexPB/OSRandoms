@@ -1,5 +1,6 @@
-package com.logicail.script;
+package com.logicail;
 
+import com.logicail.accessors.DefinitionManager;
 import com.logicail.wrappers.Definition;
 import com.logicail.wrappers.loaders.Loader;
 import org.powerbot.script.rt4.ClientAccessor;
