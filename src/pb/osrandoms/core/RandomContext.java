@@ -16,7 +16,7 @@ public class RandomContext extends ClientContext {
 		try {
 			this.definitions = new DefinitionManager(ctx);
 		} catch (FileNotFoundException e) {
-			ctx.controller.script().log.info("Failed to load cache");
+			e.printStackTrace();
 		}
 	}
 }
