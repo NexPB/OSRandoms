@@ -16,8 +16,8 @@ import java.util.Arrays;
 		properties = "topic=-1;client=4"
 )
 public class MasterRandoms extends GraphScript<RandomContext> implements PaintListener {
-
-	public MasterRandoms() {
+	@Override
+	public void start() {
 		chain.addAll(Arrays.asList(new QuizMaster(ctx), new StrangePlant(ctx), new StrangeBox(ctx), new ExpRewardClaimer(ctx), new TalkToRandoms(ctx), new Pinball(ctx), new SandwichLady(ctx), new Mime(ctx), new DrillDemon(ctx)));
 	}
 
