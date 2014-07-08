@@ -5,22 +5,19 @@ import org.powerbot.script.rt4.Component;
 import org.powerbot.script.rt4.Game.Tab;
 import org.powerbot.script.rt4.Item;
 import org.powerbot.script.rt4.Widget;
-
-import java.util.concurrent.Callable;
-
 import pb.osrandoms.core.OSRandom;
 import pb.osrandoms.core.RandomContext;
 
+import java.util.concurrent.Callable;
+
 /**
- * 
  * @author Robert G
- *
  */
 public class StrangeBox extends OSRandom {
-	
+
 	private static final int ANSWER_SETTING_ID = 312;
 	private static final int STRANGE_BOX_ID = 3062;
-	private static final Widget PARENT = ctx.widgets.widget(190);
+	private final Widget PARENT = ctx.widgets.widget(190);
 
 	public StrangeBox(RandomContext ctx) {
 		super(ctx);
@@ -72,5 +69,5 @@ public class StrangeBox extends OSRandom {
 	public boolean valid() {
 		return !ctx.inventory.select().id(STRANGE_BOX_ID).isEmpty();
 	}
-	
+
 }
