@@ -17,6 +17,7 @@ import java.util.concurrent.Callable;
  * Need to test if it picks the correct mat, Exercise.id might be in the reverse order
  * Check it doesn't matter which mat you click on (tile1 or tile2)
  */
+@OSRandom.RandomManifest(name = "Drill Demon")
 public class DrillDemon extends OSRandom {
 	private static final int SETTING_ID = 531;
 	private Exercise currentExercise = null;

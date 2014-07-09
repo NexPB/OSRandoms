@@ -17,6 +17,7 @@ import java.util.concurrent.Callable;
  * @author Robert G
  * Tested and working as of 08/07/2014
  */
+@OSRandom.RandomManifest(name = "Exp Reward Claimer")
 public class ExpRewardClaimer extends OSRandom {
 	private static final int REWARD_WIDGET_ID = 134;
 	private static final int SELECTED_REWARD_SETTING_ID = 261;

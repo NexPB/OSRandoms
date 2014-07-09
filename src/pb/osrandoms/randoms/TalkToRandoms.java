@@ -9,6 +9,7 @@ import pb.osrandoms.core.RandomContext;
 
 import java.util.concurrent.Callable;
 
+@OSRandom.RandomManifest(name = "Talk To Randoms")
 public class TalkToRandoms extends OSRandom {
 	private static final String[] NPC_NAMES = {
 			"Drunken Dwarf",
