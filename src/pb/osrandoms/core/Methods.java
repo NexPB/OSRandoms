@@ -37,7 +37,7 @@ public class Methods extends ClientAccessor {
 	}
 
 	private Component getComponentByText(Component component, String needle) {
-		if (component.text().contains(needle)) {
+		if (component.text().toLowerCase().contains(needle.toLowerCase())) {
 			return component;
 		}
 
@@ -66,7 +66,7 @@ public class Methods extends ClientAccessor {
 		}
 		return ctx.widgets.widget(0).component(0);
 	}
-	
+
 	private Tile getTileOnScreen(final Tile tile) {
 		try {
 			if (tile.matrix(ctx).inViewport()) {
@@ -84,7 +84,7 @@ public class Methods extends ClientAccessor {
 			return null;
 		}
 	}
-	
+
 	public boolean walkTileOnScreen(Locatable loc) {
 		final Tile closest = getTileOnScreen(loc.tile());
 		return closest != null ? closest.matrix(ctx).interact("walk") : false;
