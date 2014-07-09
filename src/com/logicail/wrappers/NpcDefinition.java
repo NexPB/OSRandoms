@@ -10,10 +10,10 @@ import com.sk.datastream.Stream;
  * Time: 18:00
  */
 public class NpcDefinition extends Definition {
-	public String name;
-	public int combatLevel;
+	public String name = "null";
+	public int combatLevel = -1;
 	public String[] actions = new String[5];
-	public int idleAnimation;
+	public int idleAnimation = -1;
 	public int[] modelIds;
 	public int[] headModels;
 	public int scriptId = -1;
