@@ -1,20 +1,15 @@
 package pb.osrandoms.randoms;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import org.powerbot.script.Condition;
 import org.powerbot.script.Filter;
 import org.powerbot.script.Random;
 import org.powerbot.script.Tile;
 import org.powerbot.script.rt4.Component;
 import org.powerbot.script.rt4.GameObject;
-
 import pb.osrandoms.core.OSRandom;
 import pb.osrandoms.core.RandomContext;
+
+import java.util.*;
 
 /**
  * 
@@ -340,7 +335,7 @@ public class Maze extends OSRandom {
 		if (ctx.players.local().tile().equals(getCentre())) {
 			final GameObject shrine = ctx.objects.select().name("strange shrine").poll();
 			if (shrine.valid()) {
-				status("[Maze] Touching Strange shrine.");
+				status("Touching Strange shrine.");
 				target.set(shrine);
 				if (ctx.players.local().animation() == -1 && shrine.interact("Touch")) {
 					for (int i = 0; i < 3000; i += 20) {
@@ -382,7 +377,7 @@ public class Maze extends OSRandom {
 				if (notification != null && notification.valid()) {
 					final String text = notification.text().toLowerCase().trim();
 					if (text.contains("right way")) {
-						status("[Maze] Found unopenable door, removing it from the list.");
+						status("Found unopenable door, removing it from the list.");
 						allowedDoors.remove(nearestDoor);
 						path = null;
 						Condition.sleep(Random.nextInt(1000, 1800));
@@ -393,7 +388,7 @@ public class Maze extends OSRandom {
 				final GameObject door = getDoor(nearestDoor);
 				if (door != null && door.inViewport()) {
 					target.set(door);
-					status("[Maze] Opening door @ " + door.tile());
+					status("Opening door @ " + door.tile());
 					if (door.interact("Open", "Door")) {
 						Condition.sleep(Random.nextInt(1800, 3500));
 						return;

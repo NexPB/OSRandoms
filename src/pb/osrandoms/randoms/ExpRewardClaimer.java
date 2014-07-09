@@ -40,7 +40,7 @@ public class ExpRewardClaimer extends OSRandom {
 		final Component comp = ctx.widgets.widget(REWARD_WIDGET_ID).component(getReward().componentId());
 		if (comp.valid()) {
 			if (selectedReward() != getReward().settingValue()) {
-				status("[RewardClaimer] Selecting reward.");
+				status("Selecting reward.");
 				target.set(comp);
 				if (comp.click(Menu.filter("advance"))) {
 					Condition.wait(new Callable<Boolean>() {
@@ -51,7 +51,7 @@ public class ExpRewardClaimer extends OSRandom {
 					}, 150, 10);
 				}
 			} else {
-				status("[RewardClaimer]Confirming reward.");
+				status("Confirming reward.");
 				final Component confirm = ctx.randomMethods.getComponentByText("confirm");
 				target.set(confirm);
 				if (confirm.valid() && confirm.interact(Menu.filter("ok"))) {
@@ -64,7 +64,7 @@ public class ExpRewardClaimer extends OSRandom {
 				}
 			}
 		} else {
-			status("[RewardClaimer] Clicking exp item.");
+			status("Clicking exp item.");
 			if (ctx.game.tab(Tab.INVENTORY)) {
 				final Item item = ctx.inventory.poll();
 				target.set(item);

@@ -33,7 +33,8 @@ public abstract class OSRandom extends GraphScript.Action<RandomContext> impleme
 
 	public void status(String status) {
 		if (status != null) {
-			log.info(status);
+			final String name = name();
+			log.info(name != null ? ("[" + name + "] ") : "" + status);
 		}
 		this.status = status == null ? "" : status;
 	}
