@@ -1,15 +1,14 @@
 package pb.osrandoms.randoms;
 
-import java.util.concurrent.Callable;
-
 import org.powerbot.script.Condition;
 import org.powerbot.script.Filter;
 import org.powerbot.script.rt4.Component;
 import org.powerbot.script.rt4.Npc;
 import org.powerbot.script.rt4.Widget;
-
 import pb.osrandoms.core.OSRandom;
 import pb.osrandoms.core.RandomContext;
+
+import java.util.concurrent.Callable;
 
 /**
  * 
@@ -98,7 +97,7 @@ public class Certer extends OSRandom {
 		if (itemComponent.valid()) {
 			final Answer answer = getAnswer(itemComponent);
 			if (answer != null) {
-				status("[Certer] Selecting " + answer.getName() + ".");
+				status("Selecting " + answer.getName() + ".");
 				final Component answerComponent = getAnswerComponent(answer);
 				if (answerComponent != null) {
 					target.set(answerComponent);
@@ -116,7 +115,7 @@ public class Certer extends OSRandom {
 			}
 			return;
 		}
-		status("[Certer] Talking to " + npc.name() + ".");
+		status("Talking to " + npc.name() + ".");
 		if (npc.interact("Talk-to")) {
 			Condition.wait(new Callable<Boolean>() {
 

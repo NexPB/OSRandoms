@@ -1,9 +1,7 @@
 package pb.osrandoms.randoms;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.concurrent.Callable;
-
+import com.logicail.DefinitionCache;
+import com.logicail.wrappers.NpcDefinition;
 import org.powerbot.script.Condition;
 import org.powerbot.script.Filter;
 import org.powerbot.script.Random;
@@ -11,12 +9,12 @@ import org.powerbot.script.Tile;
 import org.powerbot.script.rt4.Component;
 import org.powerbot.script.rt4.GameObject;
 import org.powerbot.script.rt4.Npc;
-
-import com.logicail.DefinitionCache;
-import com.logicail.wrappers.NpcDefinition;
-
 import pb.osrandoms.core.OSRandom;
 import pb.osrandoms.core.RandomContext;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.concurrent.Callable;
 
 /**
  * 
@@ -147,7 +145,7 @@ public class Molly extends OSRandom {
 	public void run() {
 		final Component cont = ctx.randomMethods.getContinue();
 		if (cont.valid()) {
-			status("[Molly] Handling widgets.");
+			status("Handling widgets.");
 			if (cont.click()) {
 				Condition.wait(new Callable<Boolean>() {
 
@@ -168,7 +166,7 @@ public class Molly extends OSRandom {
 		if (!inControlRoom()) {
 			if (suspectsLoaded > 1 && suspectsLoaded < 5) {
 				suspect = null;
-				status("[Molly] Talking to Molly.");
+				status("Talking to Molly.");
 				if (molly.inViewport()) {
 					target.set(molly);
 					if (molly.interact("talk")) {
@@ -187,12 +185,12 @@ public class Molly extends OSRandom {
 			} else {
 				if (suspect == null) {
 					suspect = suspect(molly);
-					status("[Molly] Molly ID: " + Integer.toString(molly.id()));
-					status("[Molly] Evil Twin ID: " + Integer.toString(suspect.id()));
+					status("Molly ID: " + Integer.toString(molly.id()));
+					status("Evil Twin ID: " + Integer.toString(suspect.id()));
 				}
 				final Component yes = ctx.randomMethods.getComponentByText("yes, I");
 				if (yes.valid()) {
-					status("[Molly] Handling widgets.");
+					status("Handling widgets.");
 					target.set(yes);
 					if (yes.click()) {
 						Condition.wait(new Callable<Boolean>() {
@@ -205,7 +203,7 @@ public class Molly extends OSRandom {
 						});
 					}
 				} else {
-					status("[Molly] Entering control room.");
+					status("Entering control room.");
 					if (openDoor()) {
 						Condition.wait(new Callable<Boolean>() {
 
@@ -221,7 +219,7 @@ public class Molly extends OSRandom {
 		} else {
 			if (suspectsLoaded > 2) {
 				if (!controllerOpen()) {
-					status("[Molly] Opening control panel.");
+					status("Opening control panel.");
 					final GameObject panel = objectByName("control panel");
 					if (panel.valid()) {
 						if (panel.inViewport()) {
@@ -244,7 +242,7 @@ public class Molly extends OSRandom {
 						}
 					}
 				} else {
-					status("[Molly] Navigating claw.");
+					status("Navigating claw.");
 					navigateClaw();
 					Condition.wait(new Callable<Boolean>() {
 
@@ -256,7 +254,7 @@ public class Molly extends OSRandom {
 					}, 100, 120);
 				}
 			} else {
-				status("[Molly] Exiting control room.");
+				status("Exiting control room.");
 				if (openDoor()) {
 					Condition.wait(new Callable<Boolean>() {
 
