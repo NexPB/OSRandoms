@@ -35,7 +35,9 @@ public class Molly extends OSRandom {
 
 	private final DefinitionCache<NpcDefinition> npcLoader;
 	
-	private Npc molly, suspect;
+	private Npc molly;
+	
+	private int[] target_models = null;
 
 	public Molly(RandomContext ctx) {
 		super(ctx);
@@ -64,29 +66,26 @@ public class Molly extends OSRandom {
 		return ctx.npcs.select().name("Molly").poll();
 	}
 	
-	private Npc suspect(final Npc molly) {
-		final NpcDefinition mollyDef = npcLoader.get(molly.id());
-		if (mollyDef != null) {
-			return ctx.npcs.select().select(new Filter<Npc>() {
-		
-				@Override
-				public boolean accept(Npc arg0) {
-					if (!arg0.name().equalsIgnoreCase("suspect"))return false;
-					final NpcDefinition suspect = npcLoader.get(arg0.id());
-					return suspect != null && Arrays.equals(mollyDef.modelIds, suspect.modelIds);
-				}
-					
-			}).poll();
-		}
-		return ctx.npcs.nil();
+	private Npc suspect() {
+		return ctx.npcs.select().select(new Filter<Npc>() {
+
+			@Override
+			public boolean accept(Npc arg0) {
+				if (!arg0.name().equalsIgnoreCase("suspect"))return false;
+				final NpcDefinition suspect = npcLoader.get(arg0.id());
+				return suspect != null && Arrays.equals(target_models, suspect.modelIds);
+			}
+
+		}).poll();
 	}
 
 	private void navigateClaw() {
-		if (!controllerOpen() || suspect == null || !suspect.valid()) {
+		if (!controllerOpen() || target_models == null) {
 			return;
 		}
 		GameObject claw;
-		while ((claw = objectByName("evil claw")).valid() && suspect.valid()) {
+		Npc suspect = null;
+		while ((claw = objectByName("evil claw")).valid() && (suspect = suspect()).valid()) {
 			final Tile clawLoc = claw.tile();
 			final Tile susLoc = suspect.tile();
 			final ArrayList<Integer> options = new ArrayList<Integer>();
@@ -166,7 +165,7 @@ public class Molly extends OSRandom {
 		final int suspectsLoaded = ctx.npcs.select().name("suspect").size();
 		if (!inControlRoom()) {
 			if (suspectsLoaded > 1 && suspectsLoaded < 5) {
-				suspect = null;
+				target_models = null;
 				status("[Molly] Talking to Molly.");
 				if (molly.inViewport()) {
 					target.set(molly);
@@ -184,10 +183,10 @@ public class Molly extends OSRandom {
 					ctx.camera.turnTo(molly);
 				}
 			} else {
-				if (suspect == null) {
-					suspect = suspect(molly);
+				if (target_models == null) {
+					final NpcDefinition def = npcLoader.get(molly.id());
+					target_models = def != null ? def.modelIds : null;
 					status("[Molly] Molly ID: " + Integer.toString(molly.id()));
-					status("[Molly] Evil Twin ID: " + Integer.toString(suspect.id()));
 				}
 				final Component yes = ctx.randomMethods.getComponentByText("yes, I");
 				if (yes.valid()) {
