@@ -11,7 +11,7 @@ import com.sk.datastream.Stream;
  */
 public class ItemDefinition extends Definition {
 	public static ItemDefinitionLoader loader = null;
-	public String name;
+	public String name = null;
 	public boolean members;
 	public String[] groundActions = new String[]{null, null, "Take", null, null};
 	public int noteId;

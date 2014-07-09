@@ -17,6 +17,7 @@ import java.util.concurrent.Callable;
  * @author Robert G
  * Tested and working as of 08/07/2014
  */
+@OSRandom.RandomManifest(name = "Exp Reward Claimer")
 public class ExpRewardClaimer extends OSRandom {
 	private static final int REWARD_WIDGET_ID = 134;
 	private static final int SELECTED_REWARD_SETTING_ID = 261;
@@ -39,7 +40,7 @@ public class ExpRewardClaimer extends OSRandom {
 		final Component comp = ctx.widgets.widget(REWARD_WIDGET_ID).component(getReward().componentId());
 		if (comp.valid()) {
 			if (selectedReward() != getReward().settingValue()) {
-				status("[RewardClaimer] Selecting reward.");
+				status("Selecting reward.");
 				target.set(comp);
 				if (comp.click(Menu.filter("advance"))) {
 					Condition.wait(new Callable<Boolean>() {
@@ -50,7 +51,7 @@ public class ExpRewardClaimer extends OSRandom {
 					}, 150, 10);
 				}
 			} else {
-				status("[RewardClaimer]Confirming reward.");
+				status("Confirming reward.");
 				final Component confirm = ctx.randomMethods.getComponentByText("confirm");
 				target.set(confirm);
 				if (confirm.valid() && confirm.interact(Menu.filter("ok"))) {
@@ -63,7 +64,7 @@ public class ExpRewardClaimer extends OSRandom {
 				}
 			}
 		} else {
-			status("[RewardClaimer] Clicking exp item.");
+			status("Clicking exp item.");
 			if (ctx.game.tab(Tab.INVENTORY)) {
 				final Item item = ctx.inventory.poll();
 				target.set(item);

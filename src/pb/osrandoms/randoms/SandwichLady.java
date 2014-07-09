@@ -13,6 +13,7 @@ import java.util.concurrent.Callable;
  * TODO:
  * - Make sure modelids are right!
  */
+@OSRandom.RandomManifest(name = "Sandwich Lady")
 public class SandwichLady extends OSRandom {
 	public SandwichLady(RandomContext ctx) {
 		super(ctx);

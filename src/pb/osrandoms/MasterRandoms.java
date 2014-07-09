@@ -18,10 +18,10 @@ import java.util.Arrays;
 public class MasterRandoms extends GraphScript<RandomContext> implements PaintListener {
 	@Override
 	public void start() {
-		chain.addAll(Arrays.asList(new Molly(ctx), new Maze(ctx), new QuizMaster(ctx), new StrangePlant(ctx), 
-				new StrangeBox(ctx), new ExpRewardClaimer(ctx), new TalkToRandoms(ctx), new Pinball(ctx), 
-				new SandwichLady(ctx), new Mime(ctx), new DrillDemon(ctx), new Certer(ctx), new Frogs(ctx),
-				new FrogCave(ctx)));
+		chain.addAll(Arrays.asList(new Molly(ctx), new Maze(ctx), new QuizMaster(ctx), new StrangePlant(ctx),
+				new StrangeBox(ctx), new ExpRewardClaimer(ctx), new TalkToRandoms(ctx), new Pinball(ctx),
+				new SandwichLady(ctx), new Mime(ctx), new DrillDemon(ctx), new Certer(ctx),
+				new LostAndFound(ctx), new Pillory(ctx), new Frogs(ctx), new FrogCave(ctx)));
 	}
 
 	@Override
@@ -31,7 +31,8 @@ public class MasterRandoms extends GraphScript<RandomContext> implements PaintLi
 		if (action != null) {
 			action.repaint(g);
 			g.setColor(Color.WHITE);
-			g.drawString(action.status(), 10, 50);
+			g.drawString("Active random: " + action.name(), 10, 45);
+			g.drawString("Status: " + action.status(), 10, 60);
 		}
 	}
 

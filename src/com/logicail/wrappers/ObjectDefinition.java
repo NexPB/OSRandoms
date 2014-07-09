@@ -10,7 +10,7 @@ import com.sk.datastream.Stream;
  * Time: 13:49
  */
 public class ObjectDefinition extends Definition {
-	public String name;
+	public String name = "null";
 	public int type = 0;
 	public int width = 1;
 	public int height = 1;

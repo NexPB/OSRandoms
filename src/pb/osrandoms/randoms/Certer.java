@@ -1,31 +1,31 @@
 package pb.osrandoms.randoms;
 
-import java.util.concurrent.Callable;
-
 import org.powerbot.script.Condition;
 import org.powerbot.script.Filter;
 import org.powerbot.script.rt4.Component;
 import org.powerbot.script.rt4.Npc;
 import org.powerbot.script.rt4.Widget;
-
 import pb.osrandoms.core.OSRandom;
 import pb.osrandoms.core.RandomContext;
+
+import java.util.concurrent.Callable;
 
 /**
  * 
  * @author Robert G
  * 
- * Tested working as of 08/07/2014
+ *         Tested working as of 08/07/2014
  * 
  */
+@OSRandom.RandomManifest(name = "Certer")
 public class Certer extends OSRandom {
-	
+
 	private enum Answer {
 
-		FISH(8829), 
-		RING(8834), 
+		FISH(8829),
+		RING(8834),
 		SWORD(8836),
-		SPADE(8837), 
+		SPADE(8837),
 		SHIELD(8832),
 		AXE(8828),
 		SHEARS(8835),
@@ -43,13 +43,13 @@ public class Certer extends OSRandom {
 
 	}
 
-	private final String[] npcs = { "Niles", "Giles", "Miles" };
+	private final String[] npcs = {"Niles", "Giles", "Miles"};
 	private final int parent_widget_id = 184;
 	private final int item_component_id = 7;
 	private final Filter<Npc> npcFilter = new Filter<Npc>() {
 		@Override
 		public boolean accept(Npc arg0) {
-			return arg0.interacting().equals(ctx.players.local()) 
+			return arg0.interacting().equals(ctx.players.local())
 					|| arg0.overheadMessage().contains(ctx.players.local().name());
 		}
 	};
@@ -89,7 +89,7 @@ public class Certer extends OSRandom {
 				public Boolean call() throws Exception {
 					return !npc.valid();
 				}
-				
+
 			});
 			return;
 		}
@@ -97,7 +97,7 @@ public class Certer extends OSRandom {
 		if (itemComponent.valid()) {
 			final Answer answer = getAnswer(itemComponent);
 			if (answer != null) {
-				status("[Certer] Selecting " + answer.getName() + ".");
+				status("Selecting " + answer.getName() + ".");
 				final Component answerComponent = getAnswerComponent(answer);
 				if (answerComponent != null) {
 					target.set(answerComponent);
@@ -115,7 +115,7 @@ public class Certer extends OSRandom {
 			}
 			return;
 		}
-		status("[Certer] Talking to " + npc.name() + ".");
+		status("Talking to " + npc.name() + ".");
 		if (npc.interact("Talk-to")) {
 			Condition.wait(new Callable<Boolean>() {
 

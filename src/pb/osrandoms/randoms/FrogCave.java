@@ -21,6 +21,7 @@ import pb.osrandoms.core.RandomContext;
  * @author Robert G
  *
  */
+@OSRandom.RandomManifest(name = "Frog Cave")
 public class FrogCave extends OSRandom {
 	
 	private final int[] TARGET_MODELS = {6948, 6944};
@@ -55,7 +56,7 @@ public class FrogCave extends OSRandom {
 			return;
 		}
 		if (ctx.randomMethods.clickContinue()) {
-			status("[FrogCave] Handling widgets.");
+			status("Handling widgets.");
 			Condition.wait(new Callable<Boolean>() {
 				
 				@Override
@@ -67,7 +68,7 @@ public class FrogCave extends OSRandom {
 		} else {
 			final Component comp = ctx.randomMethods.getComponentByText("i'm very sorry");
 			if (comp.valid() && comp.click()) {
-				status("[FrogCave] Handling widgets.");
+				status("Handling widgets.");
 				Condition.wait(new Callable<Boolean>() {
 
 					@Override
@@ -77,7 +78,7 @@ public class FrogCave extends OSRandom {
 					
 				});
 			} else {
-				status("[FrogCave] Talking to FROG.");
+				status("Talking to Frog.");
 				final Npc frog = ctx.npcs.poll();
 				if (frog.inViewport() && frog.interact(Menu.filter(""))) {
 					Condition.wait(new Callable<Boolean>() {

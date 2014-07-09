@@ -13,6 +13,7 @@ import java.util.concurrent.Callable;
  * TODO:
  * - Make sure false animations are right
  */
+@OSRandom.RandomManifest(name = "Strange Plant")
 public class StrangePlant extends OSRandom {
 	private final int[] FALSE_ANIMATIONS = {348, 350};
 	private final String PLANT_NAME = "Strange plant";

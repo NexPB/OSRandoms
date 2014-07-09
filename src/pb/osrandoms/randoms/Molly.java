@@ -24,6 +24,7 @@ import pb.osrandoms.core.RandomContext;
  *
  * TODO: Check if new system to find suspect works properly.
  */
+@OSRandom.RandomManifest(name = "Molly")
 public class Molly extends OSRandom {
 
 	private static final int CONTROL_INTERFACEGROUP = 240;
@@ -145,7 +146,7 @@ public class Molly extends OSRandom {
 	public void run() {
 		final Component cont = ctx.randomMethods.getContinue();
 		if (cont.valid()) {
-			status("[Molly] Handling widgets.");
+			status("Handling widgets.");
 			if (cont.click()) {
 				Condition.wait(new Callable<Boolean>() {
 	
@@ -186,11 +187,11 @@ public class Molly extends OSRandom {
 				if (target_models == null) {
 					final NpcDefinition def = npcLoader.get(molly.id());
 					target_models = def != null ? def.modelIds : null;
-					status("[Molly] Molly ID: " + Integer.toString(molly.id()));
+					status("Molly ID: " + Integer.toString(molly.id()));
 				}
 				final Component yes = ctx.randomMethods.getComponentByText("yes, I");
 				if (yes.valid()) {
-					status("[Molly] Handling widgets.");
+					status("Handling widgets.");
 					target.set(yes);
 					if (yes.click()) {
 						Condition.wait(new Callable<Boolean>() {
@@ -203,7 +204,7 @@ public class Molly extends OSRandom {
 						});
 					}
 				} else {
-					status("[Molly] Entering control room.");
+					status("Entering control room.");
 					if (openDoor()) {
 						Condition.wait(new Callable<Boolean>() {
 
@@ -219,7 +220,7 @@ public class Molly extends OSRandom {
 		} else {
 			if (suspectsLoaded > 2) {
 				if (!controllerOpen()) {
-					status("[Molly] Opening control panel.");
+					status("Opening control panel.");
 					final GameObject panel = objectByName("control panel");
 					if (panel.valid()) {
 						if (panel.inViewport()) {
@@ -242,7 +243,7 @@ public class Molly extends OSRandom {
 						}
 					}
 				} else {
-					status("[Molly] Navigating claw.");
+					status("Navigating claw.");
 					navigateClaw();
 					Condition.wait(new Callable<Boolean>() {
 
@@ -254,7 +255,7 @@ public class Molly extends OSRandom {
 					}, 100, 120);
 				}
 			} else {
-				status("[Molly] Exiting control room.");
+				status("Exiting control room.");
 				if (openDoor()) {
 					Condition.wait(new Callable<Boolean>() {
 

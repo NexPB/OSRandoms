@@ -22,6 +22,7 @@ import com.logicail.wrappers.NpcDefinition;
  * TODO: Find other options as there are more than 3.
  *
  */
+@OSRandom.RandomManifest(name = "Frogs")
 public class Frogs extends OSRandom {
 	
 	private final int[] TARGET_MODELS = {6948, 6944};
@@ -63,7 +64,7 @@ public class Frogs extends OSRandom {
 	@Override
 	public void run() {
 		if (ctx.randomMethods.clickContinue()) {
-			status("[Frog] Clicking continue.");
+			status("Clicking continue.");
 			Condition.wait(new Callable<Boolean>() {
 
 				@Override
@@ -76,7 +77,7 @@ public class Frogs extends OSRandom {
 		}
 		final Component click = getComp();
 		if (click.valid()) {
-			status("[Frog] Clicking " + click.text());
+			status("Clicking " + click.text());
 			if (click.click()) {
 				Condition.wait(new Callable<Boolean>() {
 
@@ -92,7 +93,7 @@ public class Frogs extends OSRandom {
 		final Npc frog = ctx.npcs.poll();
 		if (frog.valid()) {
 			if (frog.animation() != -1) {
-				status("[Frog] Waiting for Frog to transform.");
+				status("Waiting for Frog to transform.");
 				Condition.wait(new Callable<Boolean>() {
 
 					@Override
@@ -103,7 +104,7 @@ public class Frogs extends OSRandom {
 				});
 				return;
 			}
-			status("[Frog] Talking to frog.");
+			status("Talking to frog.");
 			if (frog.inViewport() && frog.interact(Menu.filter("talk", "frog"))) {
 				Condition.wait(new Callable<Boolean>() {
 
