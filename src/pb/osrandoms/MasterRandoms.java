@@ -20,7 +20,8 @@ public class MasterRandoms extends GraphScript<RandomContext> implements PaintLi
 	public void start() {
 		chain.addAll(Arrays.asList(new Molly(ctx), new Maze(ctx), new QuizMaster(ctx), new StrangePlant(ctx),
 				new StrangeBox(ctx), new ExpRewardClaimer(ctx), new TalkToRandoms(ctx), new Pinball(ctx),
-				new SandwichLady(ctx), new Mime(ctx), new DrillDemon(ctx), new Certer(ctx)));
+				new SandwichLady(ctx), new Mime(ctx), new DrillDemon(ctx), new Certer(ctx),
+				new LostAndFound(ctx)));
 	}
 
 	@Override
