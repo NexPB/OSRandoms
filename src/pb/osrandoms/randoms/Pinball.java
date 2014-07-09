@@ -10,9 +10,10 @@ import pb.osrandoms.core.RandomContext;
 import java.util.concurrent.Callable;
 
 //TODO Sometimes tags the wrong post due to the screen changing angle.
+@OSRandom.RandomManifest(name = "Pinball")
 public class Pinball extends OSRandom {
-	
-	private static final Tile[] TILES = new Tile[]{ new Tile(47, 54, 0), new Tile(49, 57, 0), new Tile(52, 58, 0), new Tile(55, 57, 0), new Tile(57, 54, 0) };
+
+	private static final Tile[] TILES = new Tile[]{new Tile(47, 54, 0), new Tile(49, 57, 0), new Tile(52, 58, 0), new Tile(55, 57, 0), new Tile(57, 54, 0)};
 	private static final int[] POST_BOUNDS = {-60, 60, -60, 60, 0, 800};
 
 	public Pinball(RandomContext ctx) {
@@ -70,7 +71,7 @@ public class Pinball extends OSRandom {
 					}, 200, 20);
 					return;
 				}
-				
+
 				ctx.randomMethods.walkTileOnScreen(exit);
 			}
 			return;

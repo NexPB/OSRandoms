@@ -20,10 +20,11 @@ import pb.osrandoms.core.RandomContext;
  * 
  * @author Timer
  * 
- * Updated by Robert G 6/7/2014
- * Needs testing and possibly more work.
+ *         Updated by Robert G 6/7/2014
+ *         Needs testing and possibly more work.
  *
  */
+@OSRandom.RandomManifest(name = "Maze")
 public class Maze extends OSRandom {
 
 	private final class Door {
@@ -37,18 +38,18 @@ public class Maze extends OSRandom {
 			this.main = new Tile(x, y, 0);
 			this.direction = direction;
 			switch (direction) {
-			case 'n':
-				y += 1;
-				break;
-			case 's':
-				y -= 1;
-				break;
-			case 'w':
-				x -= 1;
-				break;
-			case 'e':
-				x += 1;
-				break;
+				case 'n':
+					y += 1;
+					break;
+				case 's':
+					y -= 1;
+					break;
+				case 'w':
+					x -= 1;
+					break;
+				case 'e':
+					x += 1;
+					break;
 			}
 			this.after = new Tile(x, y, 0);
 		}
@@ -333,7 +334,7 @@ public class Maze extends OSRandom {
 
 		if (ctx.players.local().inMotion() || ctx.players.local().animation() != -1) {
 			Condition.sleep(Random.nextInt(80, 150));
-			return ;
+			return;
 		}
 
 		if (ctx.players.local().tile().equals(getCentre())) {
@@ -360,49 +361,49 @@ public class Maze extends OSRandom {
 
 		if (path != null) {
 			main:
-				for (final Tile doorStep : path) {
-					for (final Door door : allowedDoors) {
-						if ((door.main.equals(doorStep) || door.after.equals(doorStep)) && (door.main.matrix(ctx).reachable() || door.after.matrix(ctx).reachable())) {
-							nearestDoor = door;
-							break main;
-						}
+			for (final Tile doorStep : path) {
+				for (final Door door : allowedDoors) {
+					if ((door.main.equals(doorStep) || door.after.equals(doorStep)) && (door.main.matrix(ctx).reachable() || door.after.matrix(ctx).reachable())) {
+						nearestDoor = door;
+						break main;
+					}
+				}
+			}
+
+			if (nearestDoor != null) {
+				if (!nearestDoor.main.matrix(ctx).inViewport()) {
+					if (ctx.movement.step(nearestDoor.main)) {
+						Condition.sleep(Random.nextInt(800, 1400));
+					}
+					return;
+				}
+
+				final Component notification = ctx.widgets.widget(WIDGET_CHAT).component(WIDGET_CHAT_TEXT);
+				if (notification != null && notification.valid()) {
+					final String text = notification.text().toLowerCase().trim();
+					if (text.contains("right way")) {
+						status("[Maze] Found unopenable door, removing it from the list.");
+						allowedDoors.remove(nearestDoor);
+						path = null;
+						Condition.sleep(Random.nextInt(1000, 1800));
+						return;
 					}
 				}
 
-		if (nearestDoor != null) {
-			if (!nearestDoor.main.matrix(ctx).inViewport()) {
-				if (ctx.movement.step(nearestDoor.main)) {
-					Condition.sleep(Random.nextInt(800, 1400));
+				final GameObject door = getDoor(nearestDoor);
+				if (door != null && door.inViewport()) {
+					target.set(door);
+					status("[Maze] Opening door @ " + door.tile());
+					if (door.interact("Open", "Door")) {
+						Condition.sleep(Random.nextInt(1800, 3500));
+						return;
+					}
+					ctx.camera.angle(nearestDoor.direction);
+					ctx.camera.pitch(true);
 				}
+				Condition.sleep(Random.nextInt(800, 1400));
 				return;
 			}
-
-			final Component notification = ctx.widgets.widget(WIDGET_CHAT).component(WIDGET_CHAT_TEXT);
-			if (notification != null && notification.valid()) {
-				final String text = notification.text().toLowerCase().trim();
-				if (text.contains("right way")) {
-					status("[Maze] Found unopenable door, removing it from the list.");
-					allowedDoors.remove(nearestDoor);
-					path = null;
-					Condition.sleep(Random.nextInt(1000, 1800));
-					return;
-				}
-			}
-
-			final GameObject door = getDoor(nearestDoor);
-			if (door != null && door.inViewport()) {
-				target.set(door);
-				status("[Maze] Opening door @ " + door.tile());
-				if (door.interact("Open", "Door")) {
-					Condition.sleep(Random.nextInt(1800, 3500));
-					return;
-				}
-				ctx.camera.angle(nearestDoor.direction);
-				ctx.camera.pitch(true);
-			}
-			Condition.sleep(Random.nextInt(800, 1400));
-			return;
-		}
 		}
 
 		Condition.sleep(Random.nextInt(1000, 2500));

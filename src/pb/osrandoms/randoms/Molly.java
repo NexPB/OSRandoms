@@ -22,8 +22,9 @@ import pb.osrandoms.core.RandomContext;
  * 
  * @author Robert G
  *
- * TODO: Check if new system to find suspect works properly.
+ *         TODO: Check if new system to find suspect works properly.
  */
+@OSRandom.RandomManifest(name = "Molly")
 public class Molly extends OSRandom {
 
 	private static final int CONTROL_INTERFACEGROUP = 240;
@@ -34,7 +35,7 @@ public class Molly extends OSRandom {
 	private static final int CONTROLS_RIGHT = 32;
 
 	private final DefinitionCache<NpcDefinition> npcLoader;
-	
+
 	private Npc molly, suspect;
 
 	public Molly(RandomContext ctx) {
@@ -59,23 +60,23 @@ public class Molly extends OSRandom {
 		final GameObject o = objectByName("door");
 		return o.valid() && o.tile().x() < ctx.players.local().tile().x();
 	}
-	
+
 	private Npc molly() {
 		return ctx.npcs.select().name("Molly").poll();
 	}
-	
+
 	private Npc suspect(final Npc molly) {
 		final NpcDefinition mollyDef = npcLoader.get(molly.id());
 		if (mollyDef != null) {
 			return ctx.npcs.select().select(new Filter<Npc>() {
-		
+
 				@Override
 				public boolean accept(Npc arg0) {
-					if (!arg0.name().equalsIgnoreCase("suspect"))return false;
+					if (!arg0.name().equalsIgnoreCase("suspect")) return false;
 					final NpcDefinition suspect = npcLoader.get(arg0.id());
 					return suspect != null && Arrays.equals(mollyDef.modelIds, suspect.modelIds);
 				}
-					
+
 			}).poll();
 		}
 		return ctx.npcs.nil();
@@ -149,12 +150,12 @@ public class Molly extends OSRandom {
 			status("[Molly] Handling widgets.");
 			if (cont.click()) {
 				Condition.wait(new Callable<Boolean>() {
-	
+
 					@Override
 					public Boolean call() throws Exception {
 						return !cont.valid();
 					}
-	
+
 				});
 			}
 			return;
@@ -172,12 +173,12 @@ public class Molly extends OSRandom {
 					target.set(molly);
 					if (molly.interact("talk")) {
 						Condition.wait(new Callable<Boolean>() {
-	
+
 							@Override
 							public Boolean call() throws Exception {
 								return ctx.randomMethods.getContinue().valid();
 							}
-	
+
 						});
 					}
 				} else {
@@ -200,7 +201,7 @@ public class Molly extends OSRandom {
 							public Boolean call() throws Exception {
 								return !yes.valid();
 							}
-							
+
 						});
 					}
 				} else {
@@ -227,12 +228,12 @@ public class Molly extends OSRandom {
 							target.set(panel);
 							if (panel.interact("use")) {
 								Condition.wait(new Callable<Boolean>() {
-	
+
 									@Override
 									public Boolean call() throws Exception {
 										return controllerOpen();
 									}
-	
+
 								});
 							}
 						} else {
@@ -272,7 +273,7 @@ public class Molly extends OSRandom {
 
 	@Override
 	public boolean valid() {
-		return (molly = molly()).valid() && molly.interacting().equals(ctx.players.local()) 
+		return (molly = molly()).valid() && molly.interacting().equals(ctx.players.local())
 				|| objectByName("control panel").valid();
 	}
 
