@@ -23,7 +23,7 @@ import pb.osrandoms.core.RandomContext;
  * @author Robert G
  *		
  *		TODO Get lever bounds.
- *		Known bugs: Can't click lever on the wall, possibly due to bounds being absent.
+ *		Known bugs: Can't click lever on the wall, possibly due to incorrect bounds.
  */
 @OSRandom.RandomManifest(name = "Prison Pete")
 public class PrisonPete extends OSRandom {
@@ -33,6 +33,7 @@ public class PrisonPete extends OSRandom {
 	private final int model_component_id = 3;
 	private final int balloon_type_close_component_id = 4;
 	private final int setting_balloons_popped_id = 638;
+	private final int[] lever_bounds = {56, 80, -140, -48, -24, 32};
 	private final Tile exit = new Tile(2104, 4466, 0);
 	private final String lever = "Lever";
 	private final String balloon_animal = "Balloon Animal";
@@ -81,6 +82,10 @@ public class PrisonPete extends OSRandom {
 
 	@Override
 	public void run() {
+		if (target_models != null && !ctx.inventory.select().id(key_id).isEmpty()) {
+			target_models = null;
+			return;
+		}
 		if (ctx.randomMethods.clickContinue()) {
 			status("Clicking continue.");
 			Condition.wait(new Callable<Boolean>() {
@@ -100,10 +105,6 @@ public class PrisonPete extends OSRandom {
 		if (ctx.varpbits.varpbit(setting_balloons_popped_id) == 96) {
 			status("[PrisonPete] Exiting prison.");
 			ctx.movement.step(exit);
-			return;
-		}
-		if (!ctx.inventory.select().id(key_id).isEmpty()) {
-			target_models = null;
 			return;
 		}
 		if (target_models == null) {
@@ -134,7 +135,7 @@ public class PrisonPete extends OSRandom {
 				status("Pulling Lever.");
 				final GameObject lever = ctx.objects.poll();
 				target.set(lever);
-				//TODO set lever bounds.
+				lever.bounds(lever_bounds);
 				if (lever.inViewport()) {
 					if (lever.interact(Menu.filter("Pull", "Lever"))) {
 						Condition.wait(new Callable<Boolean>() {
