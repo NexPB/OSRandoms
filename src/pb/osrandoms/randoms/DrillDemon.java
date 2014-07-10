@@ -110,7 +110,7 @@ public class DrillDemon extends OSRandom {
 
 	@Override
 	public boolean valid() {
-		return ctx.npcs.select().name("Sergeant Damien").within(10).poll().valid();
+		return ctx.npcs.select().name("Sergeant Damien").within(10).peek().valid();
 	}
 
 	private enum Exercise {
