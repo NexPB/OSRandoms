@@ -16,7 +16,13 @@ import com.logicail.wrappers.ObjectDefinition;
 
 import pb.osrandoms.core.OSRandom;
 import pb.osrandoms.core.RandomContext;
-
+/**
+ * 
+ * @author Timer
+ * 
+ *   Updated by Robert G
+ *
+ */
 public class SurpriseExam extends OSRandom {
 
 	private class ObjectRelations {
