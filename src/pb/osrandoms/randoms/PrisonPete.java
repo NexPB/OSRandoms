@@ -22,8 +22,7 @@ import pb.osrandoms.core.RandomContext;
  * 
  * @author Robert G
  *		
- *		TODO Get lever bounds.
- *		Known bugs: Can't click lever on the wall, possibly due to incorrect bounds.
+ *		TODO Check lever interaction works ok, if not adjust bounds.
  */
 @OSRandom.RandomManifest(name = "Prison Pete")
 public class PrisonPete extends OSRandom {
