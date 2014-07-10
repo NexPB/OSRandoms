@@ -23,6 +23,7 @@ import pb.osrandoms.core.RandomContext;
  *   Updated by Robert G
  *
  */
+@OSRandom.RandomManifest(name = "Surprise Exam")
 public class SurpriseExam extends OSRandom {
 
 	private class ObjectRelations {
