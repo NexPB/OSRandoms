@@ -64,8 +64,7 @@ public class Methods extends ClientAccessor {
 	 * @return <code>true</code> if text like "Click here to continue" is visible on screen, otherwise <code>false</code>
 	 */
 	public boolean queryContinue() {
-		final Component component = getContinue();
-		return component.valid() && component.visible();
+		return getContinue().valid();
 	}
 
 	/**
