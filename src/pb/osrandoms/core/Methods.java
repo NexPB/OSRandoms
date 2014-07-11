@@ -26,10 +26,17 @@ public class Methods extends ClientAccessor {
 		return ctx.npcs.select().name(name).select(filter).poll();
 	}
 
+	/**
+	 * @return the visible continue button, otherwise <code>ctx.widgets.widget(0).component(0)</code> therefore use {@link Component#valid()} to see if it was found
+	 * @see #clickContinue()}
+	 */
 	public Component getContinue() {
 		return getComponentByText("Click here to continue", "Click to continue");
 	}
 
+	/**
+	 * @return <code>true</code> if continue was clicked, otherwise <code>false</code>
+	 */
 	public boolean clickContinue() {
 		final Component component = getContinue();
 		if (component.valid() && component.click()) {
@@ -53,11 +60,21 @@ public class Methods extends ClientAccessor {
 		return false;
 	}
 
+	/**
+	 * @return <code>true</code> if text like "Click here to continue" is visible on screen, otherwise <code>false</code>
+	 */
 	public boolean queryContinue() {
 		final Component component = getContinue();
 		return component.valid() && component.visible();
 	}
 
+	/**
+	 * Recursively search a <code>component</code> for visible components with one of the texts from <code>needle</code>
+	 *
+	 * @param component to search
+	 * @param needle    text to find
+	 * @return <code>null</code> if no matches found, otherwise the visible component
+	 */
 	private Component getComponentByText(Component component, String... needle) {
 		final String text = component.text().toLowerCase();
 		for (String s : needle) {
@@ -78,6 +95,11 @@ public class Methods extends ClientAccessor {
 		return null;
 	}
 
+	/**
+	 * Find a visible component which contains one of text from <code>needle</code>
+	 *
+	 * @return the component or <code>ctx.widgets.widget(0).component(0)</code> if non found therefore use {@link Component#valid()} to see if it was found
+	 */
 	public Component getComponentByText(String... needle) {
 		for (Widget widget : ctx.widgets.array()) {
 			for (Component component : widget.components()) {
