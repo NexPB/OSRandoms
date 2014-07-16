@@ -10,13 +10,16 @@ import com.logicail.wrappers.ObjectDefinition;
  * Date: 07/07/2014
  * Time: 18:06
  */
-public class ObjectDefinitionLoader extends Loader<ObjectDefinition> {
+public class ObjectDefinitionLoader extends ArchiveLoader<ObjectDefinition> {
 	public ObjectDefinitionLoader(CacheSystem cacheSystem) {
 		super(cacheSystem, cacheSystem.getCacheSource().getCacheType(2), 6);
 	}
 
-	public ObjectDefinition get(int id) {
-		final FileData data = getValidFile(id);
-		return new ObjectDefinition(id, data.getDataAsStream());
+	@Override
+	public ObjectDefinition load(int id) {
+		FileData data = getValidFile(id);
+		ObjectDefinition ret = new ObjectDefinition(this, id);
+		ret.decode(data.getDataAsStream());
+		return ret;
 	}
 }

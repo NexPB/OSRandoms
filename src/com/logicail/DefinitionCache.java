@@ -2,7 +2,7 @@ package com.logicail;
 
 import com.logicail.accessors.DefinitionManager;
 import com.logicail.wrappers.Definition;
-import com.logicail.wrappers.loaders.Loader;
+import com.logicail.wrappers.loaders.WrapperLoader;
 import org.powerbot.script.rt4.ClientAccessor;
 import org.powerbot.script.rt4.ClientContext;
 
@@ -19,7 +19,7 @@ public class DefinitionCache<T extends Definition> extends ClientAccessor {
 	private static final int MAX_ENTRIES = 100;
 
 	private final DefinitionManager manager;
-	private final Loader<T> loader;
+	private final WrapperLoader<T> loader;
 
 	private LinkedHashMap<Integer, T> cache = new LinkedHashMap<Integer, T>(MAX_ENTRIES + 1, 0.75f, true) {
 		public boolean removeEldestEntry(Map.Entry eldest) {
@@ -27,7 +27,7 @@ public class DefinitionCache<T extends Definition> extends ClientAccessor {
 		}
 	};
 
-	public DefinitionCache(ClientContext ctx, DefinitionManager manager, Loader<T> loader) {
+	public DefinitionCache(ClientContext ctx, DefinitionManager manager, WrapperLoader<T> loader) {
 		super(ctx);
 		this.manager = manager;
 		this.loader = loader;
@@ -42,7 +42,7 @@ public class DefinitionCache<T extends Definition> extends ClientAccessor {
 			return cache.get(id);
 		} else {
 			try {
-				T definition = loader.get(id);
+				T definition = loader.load(id);
 				cache.put(id, definition);
 				return definition;
 			} catch (Exception ignored) {

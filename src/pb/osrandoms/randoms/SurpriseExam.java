@@ -1,8 +1,6 @@
 package pb.osrandoms.randoms;
 
-import java.util.Arrays;
-import java.util.concurrent.Callable;
-
+import com.logicail.wrappers.ObjectDefinition;
 import org.powerbot.script.Condition;
 import org.powerbot.script.Filter;
 import org.powerbot.script.Random;
@@ -10,18 +8,16 @@ import org.powerbot.script.rt4.GameObject;
 import org.powerbot.script.rt4.Npc;
 import org.powerbot.script.rt4.Player;
 import org.powerbot.script.rt4.Widget;
-
-import com.logicail.DefinitionCache;
-import com.logicail.wrappers.ObjectDefinition;
-
 import pb.osrandoms.core.OSRandom;
 import pb.osrandoms.core.RandomContext;
+
+import java.util.Arrays;
+import java.util.concurrent.Callable;
+
 /**
- * 
  * @author Timer
- * 
- *   Updated by Robert G
- *
+ *         <p/>
+ *         Updated by Robert G
  */
 @OSRandom.RandomManifest(name = "Surprise Exam")
 public class SurpriseExam extends OSRandom {
@@ -35,12 +31,12 @@ public class SurpriseExam extends OSRandom {
 			this.items = items;
 		}
 	}
-	
+
 	private static final int WIDGET_NEXT = 103;
 	private static final int WIDGET_RELATED = 559;
 	private static final int WIDGET_CHAT = 242;
 	private static final int WIDGET_CHAT_TEXT = 2;
-	
+
 	private static final int[] WIDGET_ITEM_RANGE = {11539, 11540, 11541, 11614, 11615, 11633};
 	private static final int[] WIDGET_ITEM_CULINARY = {11526, 11529, 11545, 11549, 11550, 11555, 11560, 11563, 11564, 11607, 11608, 11616, 11620, 11621, 11622, 11623, 11628, 11629, 11634, 11639, 11641, 11649, 11624};
 	private static final int[] WIDGET_ITEM_FISH = {11527, 11574, 11578, 11580, 11599, 11600, 11601, 11602, 11603, 11604, 11605, 11606, 11625};
@@ -60,21 +56,19 @@ public class SurpriseExam extends OSRandom {
 	private static final int[] WIDGET_ITEM_SMITHING = {11611, 11612, 11613, 11553};
 
 	public static final int[][] WIDGET_ITEMS = {
-		WIDGET_ITEM_RANGE, WIDGET_ITEM_CULINARY,
-		WIDGET_ITEM_FISH, WIDGET_ITEM_COMBAT,
-		WIDGET_ITEM_FARM, WIDGET_ITEM_MAGIC,
-		WIDGET_ITEM_FIREMAKING, WIDGET_ITEM_HATS,
-		WIDGET_ITEM_DRINKS, WIDGET_ITEM_LUMBER,
-		WIDGET_ITEM_BOOTS, WIDGET_ITEM_CRAFT,
-		WIDGET_ITEM_MINING, WIDGET_ITEM_SMITHING
+			WIDGET_ITEM_RANGE, WIDGET_ITEM_CULINARY,
+			WIDGET_ITEM_FISH, WIDGET_ITEM_COMBAT,
+			WIDGET_ITEM_FARM, WIDGET_ITEM_MAGIC,
+			WIDGET_ITEM_FIREMAKING, WIDGET_ITEM_HATS,
+			WIDGET_ITEM_DRINKS, WIDGET_ITEM_LUMBER,
+			WIDGET_ITEM_BOOTS, WIDGET_ITEM_CRAFT,
+			WIDGET_ITEM_MINING, WIDGET_ITEM_SMITHING
 	};
-	
+
 	private static final String[] COLORS = {"red", "blue", "purple", "green"};
-	private static final int[][] OBJECT_MODELS_DOORS = { { 27078 }, { 27099 }, { 27083 }, { 27076 } };
+	private static final int[][] OBJECT_MODELS_DOORS = {{27078}, {27099}, {27083}, {27076}};
 
 	private GameObject door = null;
-
-	public DefinitionCache<ObjectDefinition> objectLoader;
 
 	public final ObjectRelations[] WIDGET_ITEM_RELATIONS = {
 			new ObjectRelations("I never leave the house without some sort of jewellery.", WIDGET_ITEM_JEWELLERY),
@@ -138,7 +132,6 @@ public class SurpriseExam extends OSRandom {
 
 	public SurpriseExam(RandomContext ctx) {
 		super(ctx);
-		this.objectLoader = ctx.definitions.getLoader(ObjectDefinition.class);
 	}
 
 	private int[] getItemArray(final int item) {
@@ -166,11 +159,11 @@ public class SurpriseExam extends OSRandom {
 					door = ctx.objects.select().name("door").select(new Filter<GameObject>() {
 
 						@Override
-						public boolean accept(GameObject arg0) {
-							final ObjectDefinition def = objectLoader.get(arg0.id());
+						public boolean accept(GameObject object) {
+							final ObjectDefinition def = ctx.definitions.get(object);
 							return def != null && Arrays.equals(def.modelIds, models);
 						}
-						
+
 					}).poll();
 					break;
 				}
@@ -179,7 +172,7 @@ public class SurpriseExam extends OSRandom {
 				if (!door.inViewport()) {
 					ctx.movement.step(door);
 					for (int i = 0; i < 200; i++)
-						if (ctx.players.local().inMotion())i=0;
+						if (ctx.players.local().inMotion()) i = 0;
 					Condition.sleep(150);
 				}
 				ctx.camera.turnTo(door);

@@ -1,8 +1,8 @@
 package com.sk.cache.fs;
 
-import com.sk.cache.DataSource;
 import com.logicail.wrappers.Definition;
 import com.logicail.wrappers.loaders.*;
+import com.sk.cache.DataSource;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,7 +17,7 @@ public class CacheSystem {
 	public final ScriptDefinitionLoader varpLoader;
 	public final NpcDefinitionLoader npcLoader;
 	private final CacheSource cache;
-	private final Map<Type, Loader<?>> loaderMap = new HashMap<Type, Loader<?>>();
+	private final Map<Type, WrapperLoader<?>> loaderMap = new HashMap<Type, WrapperLoader<?>>();
 
 	public CacheSystem(CacheSource cache) {
 		this.cache = cache;
@@ -27,7 +27,7 @@ public class CacheSystem {
 		addLoader(npcLoader = new NpcDefinitionLoader(this));
 	}
 
-	public <T extends Definition> void addLoader(Loader<T> loader) {
+	public <T extends Definition> void addLoader(WrapperLoader<T> loader) {
 		ParameterizedType type = (ParameterizedType) loader.getClass().getGenericSuperclass();
 		loaderMap.put(type.getActualTypeArguments()[0], loader);
 	}
@@ -45,7 +45,7 @@ public class CacheSystem {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends Definition> Loader<T> getLoader(Class<T> wrapperClass) {
-		return (Loader<T>) loaderMap.get(wrapperClass);
+	public <T extends Definition> WrapperLoader<T> getLoader(Class<T> wrapperClass) {
+		return (WrapperLoader<T>) loaderMap.get(wrapperClass);
 	}
 }

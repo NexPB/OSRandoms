@@ -12,6 +12,7 @@ import com.sk.datastream.Stream;
 public class ItemDefinition extends Definition {
 	public static ItemDefinitionLoader loader = null;
 	public String name = null;
+	public boolean noted;
 	public boolean members;
 	public String[] groundActions = new String[]{null, null, "Take", null, null};
 	public int noteId;
@@ -51,13 +52,14 @@ public class ItemDefinition extends Definition {
 	private int equippedModelFemale1;
 	private int equippedModelMaleDialogue1;
 
-	public ItemDefinition(int id, Stream stream) {
-		super(id);
+	public ItemDefinition(ItemDefinitionLoader loader, int id) {
+		super(loader, id);
+	}
 
-		decode(stream);
-
+	public void fix() {
 		if (noteTemplateId > -1) {
-			fix(loader.get(noteTemplateId), loader.get(noteId));
+			noted = true;
+			fix(loader.load(noteTemplateId), loader.load(noteId));
 		}
 	}
 

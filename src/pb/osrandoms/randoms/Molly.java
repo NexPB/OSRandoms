@@ -1,9 +1,6 @@
 package pb.osrandoms.randoms;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.concurrent.Callable;
-
+import com.logicail.wrappers.NpcDefinition;
 import org.powerbot.script.Condition;
 import org.powerbot.script.Filter;
 import org.powerbot.script.Random;
@@ -11,18 +8,17 @@ import org.powerbot.script.Tile;
 import org.powerbot.script.rt4.Component;
 import org.powerbot.script.rt4.GameObject;
 import org.powerbot.script.rt4.Npc;
-
-import com.logicail.DefinitionCache;
-import com.logicail.wrappers.NpcDefinition;
-
 import pb.osrandoms.core.OSRandom;
 import pb.osrandoms.core.RandomContext;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.concurrent.Callable;
+
 /**
- * 
  * @author Robert G
- *
- * TODO: Check if new system to find suspect works properly.
+ *         <p/>
+ *         TODO: Check if new system to find suspect works properly.
  */
 @OSRandom.RandomManifest(name = "Molly")
 public class Molly extends OSRandom {
@@ -34,15 +30,12 @@ public class Molly extends OSRandom {
 	private static final int CONTROLS_LEFT = 31;
 	private static final int CONTROLS_RIGHT = 32;
 
-	private final DefinitionCache<NpcDefinition> npcLoader;
-	
 	private Npc molly;
-	
+
 	private int[] target_models = null;
 
 	public Molly(RandomContext ctx) {
 		super(ctx);
-		this.npcLoader = ctx.definitions.getLoader(NpcDefinition.class);
 	}
 
 	private boolean clawMoved(final Tile prevClawLoc) {
@@ -62,19 +55,18 @@ public class Molly extends OSRandom {
 		final GameObject o = objectByName("door");
 		return o.valid() && o.tile().x() < ctx.players.local().tile().x();
 	}
-	
+
 	private Npc molly() {
 		return ctx.npcs.select().name("Molly").poll();
 	}
-	
+
 	private Npc suspect() {
 		return ctx.npcs.select().select(new Filter<Npc>() {
 
 			@Override
-			public boolean accept(Npc arg0) {
-				if (!arg0.name().equalsIgnoreCase("suspect"))return false;
-				final NpcDefinition suspect = npcLoader.get(arg0.id());
-				return suspect != null && Arrays.equals(target_models, suspect.modelIds);
+			public boolean accept(Npc npc) {
+				final NpcDefinition suspect = ctx.definitions.get(npc);
+				return suspect != null && suspect.name.equalsIgnoreCase("Suspect") && Arrays.equals(target_models, suspect.modelIds);
 			}
 
 		}).poll();
@@ -149,12 +141,12 @@ public class Molly extends OSRandom {
 			status("Handling widgets.");
 			if (cont.click()) {
 				Condition.wait(new Callable<Boolean>() {
-	
+
 					@Override
 					public Boolean call() throws Exception {
 						return !cont.valid();
 					}
-	
+
 				});
 			}
 			return;
@@ -167,17 +159,17 @@ public class Molly extends OSRandom {
 		if (!inControlRoom()) {
 			if (suspectsLoaded > 1 && suspectsLoaded < 5) {
 				target_models = null;
-				status("[Molly] Talking to Molly.");
+				status("Talking to Molly.");
 				if (molly.inViewport()) {
 					target.set(molly);
 					if (molly.interact("talk")) {
 						Condition.wait(new Callable<Boolean>() {
-	
+
 							@Override
 							public Boolean call() throws Exception {
 								return ctx.randomMethods.getContinue().valid();
 							}
-	
+
 						});
 					}
 				} else {
@@ -185,7 +177,7 @@ public class Molly extends OSRandom {
 				}
 			} else {
 				if (target_models == null) {
-					final NpcDefinition def = npcLoader.get(molly.id());
+					final NpcDefinition def = ctx.definitions.get(molly);
 					target_models = def != null ? def.modelIds : null;
 					status("Molly ID: " + Integer.toString(molly.id()));
 				}
@@ -200,7 +192,7 @@ public class Molly extends OSRandom {
 							public Boolean call() throws Exception {
 								return !yes.valid();
 							}
-							
+
 						});
 					}
 				} else {
@@ -227,12 +219,12 @@ public class Molly extends OSRandom {
 							target.set(panel);
 							if (panel.interact("use")) {
 								Condition.wait(new Callable<Boolean>() {
-	
+
 									@Override
 									public Boolean call() throws Exception {
 										return controllerOpen();
 									}
-	
+
 								});
 							}
 						} else {
@@ -272,7 +264,7 @@ public class Molly extends OSRandom {
 
 	@Override
 	public boolean valid() {
-		return (molly = molly()).valid() && molly.interacting().equals(ctx.players.local()) 
+		return (molly = molly()).valid() && molly.interacting().equals(ctx.players.local())
 				|| objectByName("control panel").valid();
 	}
 

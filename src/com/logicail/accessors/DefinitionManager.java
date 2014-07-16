@@ -1,16 +1,15 @@
 package com.logicail.accessors;
 
 import com.logicail.DefinitionCache;
-import com.logicail.wrappers.*;
+import com.logicail.wrappers.ItemDefinition;
+import com.logicail.wrappers.NpcDefinition;
+import com.logicail.wrappers.ObjectDefinition;
+import com.logicail.wrappers.VarpDefinition;
 import com.sk.cache.fs.CacheSystem;
-import org.powerbot.script.rt4.ClientAccessor;
-import org.powerbot.script.rt4.ClientContext;
+import org.powerbot.script.rt4.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,24 +19,46 @@ import java.util.Map;
  */
 public class DefinitionManager extends ClientAccessor {
 	private final CacheSystem system;
-	private final Map<Type, DefinitionCache<?>> loaderMap = new HashMap<Type, DefinitionCache<?>>();
+	private final DefinitionCache<NpcDefinition> npc;
+	private final DefinitionCache<VarpDefinition> varp;
+	private final DefinitionCache<ObjectDefinition> object;
+	private final DefinitionCache<ItemDefinition> item;
 
-	public DefinitionManager(ClientContext arg0) throws FileNotFoundException {
-		super(arg0);
+	public NpcDefinition get(Npc npc) {
+		return this.npc.get(npc.id());
+	}
+
+	public ObjectDefinition get(GameObject npc) {
+		return this.object.get(npc.id());
+	}
+
+	public ItemDefinition get(Item npc) {
+		return this.item.get(npc.id());
+	}
+
+	public VarpDefinition varp(int scriptId) {
+		return this.varp.get(scriptId);
+	}
+
+	public DefinitionManager(ClientContext ctx) throws FileNotFoundException {
+		super(ctx);
 
 		String directory = System.getProperty("user.home") + File.separator + "jagexcache" + File.separator + "oldschool" + File.separator + "LIVE" + File.separator;
 		//ctx.controller.script().log.info("Loading cache from: " + directory);
 
 		system = new CacheSystem(new File(directory));
 
-		loaderMap.put(NpcDefinition.class, new DefinitionCache<NpcDefinition>(ctx, this, system.npcLoader));
-		loaderMap.put(VarpDefinition.class, new DefinitionCache<VarpDefinition>(ctx, this, system.varpLoader));
-		loaderMap.put(ObjectDefinition.class, new DefinitionCache<ObjectDefinition>(ctx, this, system.objectLoader));
-		loaderMap.put(ItemDefinition.class, new DefinitionCache<ItemDefinition>(ctx, this, system.itemLoader));
+		npc = new DefinitionCache<NpcDefinition>(this.ctx, this, system.npcLoader);
+		varp = new DefinitionCache<VarpDefinition>(this.ctx, this, system.varpLoader);
+		object = new DefinitionCache<ObjectDefinition>(this.ctx, this, system.objectLoader);
+		item = new DefinitionCache<ItemDefinition>(this.ctx, this, system.itemLoader);
 	}
 
-	@SuppressWarnings("unchecked")
-	public <T extends Definition> DefinitionCache<T> getLoader(Class<T> wrapperClass) {
-		return (DefinitionCache<T>) loaderMap.get(wrapperClass);
+	public NpcDefinition npc(int id) {
+		return npc.get(id);
+	}
+
+	public ObjectDefinition object(int id) {
+		return object.get(id);
 	}
 }
