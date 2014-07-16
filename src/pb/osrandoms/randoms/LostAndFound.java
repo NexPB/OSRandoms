@@ -26,13 +26,13 @@ public class LostAndFound extends OSRandom {
 
 	@Override
 	public boolean valid() {
-		final GameObject appendage = ctx.objects.select().select(ObjectDefinition.name(ctx, APPENDAGE)).within(1).poll();
-		return appendage.valid() || ctx.randomMethods.getComponentByText("Abyssal Services apologise").valid();
+		return !ctx.objects.select().select(ObjectDefinition.name(ctx, APPENDAGE)).within(1).isEmpty()
+				|| ctx.randomMethods.getComponentByText("Abyssal Services apologise").valid();
 	}
 
 	private GameObject oddOneOut() {
 		HashMap<Integer, Integer> counter = new HashMap<Integer, Integer>();
-		for (GameObject appendage : ctx.objects.select().select(ObjectDefinition.name(ctx, APPENDAGE)).within(1)) {
+		for (GameObject appendage : ctx.objects) {
 			final int id = appendage.id();
 			if (counter.containsKey(id)) {
 				counter.put(id, counter.get(id) + 1);
