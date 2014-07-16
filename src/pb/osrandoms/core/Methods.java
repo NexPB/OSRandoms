@@ -85,7 +85,7 @@ public class Methods extends ClientAccessor {
 		for (Component child : component.components()) {
 			if (child.valid()) {
 				final Component search = getComponentByText(child, needle);
-				if (search.valid() && search.visible()) {
+				if (search != null && search.valid() && search.visible()) {
 					return search;
 				}
 			}
