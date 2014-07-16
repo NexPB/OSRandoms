@@ -1,7 +1,11 @@
 package com.logicail.wrappers;
 
 import com.logicail.accessors.DefinitionManager;
+import com.logicail.wrappers.loaders.ObjectDefinitionLoader;
 import com.sk.datastream.Stream;
+import org.powerbot.script.Filter;
+import org.powerbot.script.rt4.GameObject;
+import pb.osrandoms.core.RandomContext;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,12 +19,14 @@ public class ObjectDefinition extends Definition {
 	public int width = 1;
 	public int height = 1;
 	public String[] actions = new String[5];
+	public int animationId = -1;
 	public int[] modelTypes;
 	public int[] modelIds;
 	public int scriptId = -1;
 	public int configId = -1;
 	public int[] childrenIds;
 	private boolean unwalkable = true;
+	private int offsetX = 0;
 	private int offsetY = 0;
 	private int minimapIcon = -1;
 	private int mapSceneId = -1;
@@ -28,22 +34,30 @@ public class ObjectDefinition extends Definition {
 	private boolean nonFlatShading = false;
 	private int constrast = 0;
 	private int modelSizeX = 128;
-	private int offsetH = 0;
 	private int modelSizeY = 128;
-	private int brightness = 0;
+	private int offsetH = 0;
 	private int modelSizeH = 128;
+	private int brightness = 0;
 	private boolean isSolid = false;
 	private int adjustToTerrain = 0;
-	private short[] recolorTarget;
-	private int animationId = -1;
-	private short[] recolorOriginal;
-	private int offsetx = 0;
+	public short[] recolorOriginal;
+	public short[] recolorTarget;
 	private short[] unknown41a;
 	private short[] unknown41b;
 
-	public ObjectDefinition(int id, Stream stream) {
-		super(id);
-		decode(stream);
+	public ObjectDefinition(ObjectDefinitionLoader loader, int id) {
+		super(loader, id);
+	}
+
+
+	public static Filter<GameObject> name(final RandomContext ctx, final String name) {
+		return new Filter<GameObject>() {
+			@Override
+			public boolean accept(GameObject o) {
+				final ObjectDefinition definition = ctx.definitions.get(o);
+				return definition != null && definition.name != null && definition.name.equalsIgnoreCase(name);
+			}
+		};
 	}
 
 	@Override
@@ -139,7 +153,7 @@ public class ObjectDefinition extends Definition {
 		} else if (69 == opcode) {
 			s.getUByte();
 		} else if (70 == opcode) {
-			this.offsetx = s.getShort();
+			this.offsetX = s.getShort();
 		} else if (opcode == 71) {
 			this.offsetH = s.getShort();
 		} else if (72 == opcode) {
@@ -189,13 +203,13 @@ public class ObjectDefinition extends Definition {
 		if (scriptId == -1) {
 			index = configId != -1 ? manager.ctx.varpbits.varpbit(configId) : -1;
 		} else {
-			final VarpDefinition varpDefinition = manager.getLoader(VarpDefinition.class).get(scriptId);
+			final VarpDefinition varpDefinition = manager.varp(scriptId);
 			if (varpDefinition != null) {
 				index = manager.ctx.varpbits.varpbit(varpDefinition.configId) >> varpDefinition.lowerBitIndex & VarpDefinition.MASKS[varpDefinition.upperBitIndex - varpDefinition.lowerBitIndex];
 			}
 		}
 		if (index >= 0 && index < childrenIds.length && childrenIds[index] != -1) {
-			return manager.getLoader(ObjectDefinition.class).get(childrenIds[index]);
+			return manager.object(childrenIds[index]);
 		}
 		return null;
 	}

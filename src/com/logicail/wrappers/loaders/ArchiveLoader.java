@@ -1,5 +1,6 @@
 package com.logicail.wrappers.loaders;
 
+import com.logicail.wrappers.Wrapper;
 import com.sk.cache.fs.Archive;
 import com.sk.cache.fs.CacheSystem;
 import com.sk.cache.fs.CacheType;
@@ -10,37 +11,23 @@ import com.sk.cache.meta.ReferenceTable;
 /**
  * Created with IntelliJ IDEA.
  * User: Logicail
- * Date: 07/07/2014
- * Time: 18:07
+ * Date: 15/07/2014
+ * Time: 20:18
  */
-public abstract class Loader<T> {
-
-	protected final CacheType cache;
-	private final int archiveId;
-	protected final CacheSystem cacheSystem;
+public abstract class ArchiveLoader<T extends Wrapper> extends WrapperLoader<T> {
+	protected final int archiveId;
 	public final int size;
 	public final int version;
 
-	public Loader(CacheSystem cacheSystem, CacheType cache, int archiveId) {
-		this.cacheSystem = cacheSystem;
-		this.cache = cache;
+	public ArchiveLoader(CacheSystem cacheSystem, CacheType cache, int archiveId) {
+		super(cacheSystem, cache);
 		this.archiveId = archiveId;
-		final ReferenceTable table = this.cache.getTable();
+		final ReferenceTable table = cache.getTable();
 		final ArchiveMeta entry = table.getEntry(archiveId);
 		version = entry.getVersion();
 		size = entry.getChildCount();
 	}
 
-	public CacheSystem getCacheSystem() {
-		return cacheSystem;
-	}
-
-	protected FileData getValidFile(int id) {
-		FileData ret = getFile(id);
-		if (ret == null)
-			throw new IllegalArgumentException("Bad id");
-		return ret;
-	}
 
 	protected FileData getFile(int id) {
 		final Archive archive = cache.getArchive(archiveId);
@@ -50,5 +37,8 @@ public abstract class Loader<T> {
 		return data;
 	}
 
-	public abstract T get(int id);
+	@Override
+	public boolean canLoad(int id) {
+		return getFile(id) != null;
+	}
 }

@@ -1,7 +1,11 @@
 package com.logicail.wrappers;
 
 import com.logicail.accessors.DefinitionManager;
+import com.logicail.wrappers.loaders.NpcDefinitionLoader;
 import com.sk.datastream.Stream;
+import org.powerbot.script.Filter;
+import org.powerbot.script.rt4.Npc;
+import pb.osrandoms.core.RandomContext;
 
 /**
  * Created with IntelliJ IDEA.
@@ -38,13 +42,22 @@ public class NpcDefinition extends Definition {
 	private int headIcon = -1;
 	private int shadowModifier = 0;
 
-	public NpcDefinition(int id, Stream stream) {
-		super(id);
-		decode(stream);
+	public NpcDefinition(NpcDefinitionLoader loader, int id) {
+		super(loader, id);
+	}
+
+	public static Filter<Npc> name(final RandomContext ctx, final String name) {
+		return new Filter<Npc>() {
+			@Override
+			public boolean accept(Npc npc) {
+				final NpcDefinition definition = ctx.definitions.get(npc);
+				return definition != null && definition.name != null && definition.name.equalsIgnoreCase(name);
+			}
+		};
 	}
 
 	@Override
-	protected void decode(Stream s, int opcode) {
+	public void decode(Stream s, int opcode) {
 		if (1 == opcode) {
 			int count = s.getUByte();
 			this.modelIds = new int[count];
@@ -140,13 +153,13 @@ public class NpcDefinition extends Definition {
 		if (scriptId == -1) {
 			index = configId != -1 ? manager.ctx.varpbits.varpbit(configId) : -1;
 		} else {
-			final VarpDefinition varpDefinition = manager.getLoader(VarpDefinition.class).get(scriptId);
+			final VarpDefinition varpDefinition = manager.varp(scriptId);
 			if (varpDefinition != null) {
-				index = manager.ctx.varpbits.varpbit(varpDefinition.configId) >> varpDefinition.lowerBitIndex & VarpDefinition.MASKS[varpDefinition.upperBitIndex - varpDefinition.lowerBitIndex];
+				index = varpDefinition.execute(manager.ctx);
 			}
 		}
 		if (index >= 0 && index < childrenIds.length && childrenIds[index] != -1) {
-			return manager.getLoader(NpcDefinition.class).get(childrenIds[index]);
+			return manager.npc(childrenIds[index]);
 		}
 		return null;
 	}

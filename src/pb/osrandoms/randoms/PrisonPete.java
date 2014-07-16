@@ -1,8 +1,6 @@
 package pb.osrandoms.randoms;
 
-import java.util.Arrays;
-import java.util.concurrent.Callable;
-
+import com.logicail.wrappers.NpcDefinition;
 import org.powerbot.script.Condition;
 import org.powerbot.script.Filter;
 import org.powerbot.script.Random;
@@ -11,22 +9,20 @@ import org.powerbot.script.rt4.Component;
 import org.powerbot.script.rt4.GameObject;
 import org.powerbot.script.rt4.Menu;
 import org.powerbot.script.rt4.Npc;
-
-import com.logicail.DefinitionCache;
-import com.logicail.wrappers.NpcDefinition;
-
 import pb.osrandoms.core.OSRandom;
 import pb.osrandoms.core.RandomContext;
 
+import java.util.Arrays;
+import java.util.concurrent.Callable;
+
 /**
- * 
  * @author Robert G
- *		
- *		TODO Check lever interaction works ok, if not adjust bounds.
+ *         <p/>
+ *         TODO Check lever interaction works ok, if not adjust bounds.
  */
 @OSRandom.RandomManifest(name = "Prison Pete")
 public class PrisonPete extends OSRandom {
-	
+
 	private final int key_id = 6966;
 	private final int balloon_type_widget_id = 273;
 	private final int model_component_id = 3;
@@ -38,42 +34,40 @@ public class PrisonPete extends OSRandom {
 	private final String balloon_animal = "Balloon Animal";
 	private final Filter<Npc> balloon_filter = new Filter<Npc>() {
 		@Override
-		public boolean accept(Npc arg0) {
-			final NpcDefinition def = npcLoader.get(arg0.id());
+		public boolean accept(Npc npc) {
+			final NpcDefinition def = ctx.definitions.get(npc);
 			return def != null && Arrays.equals(def.modelIds, target_models);
 		}
 	};
-	private final DefinitionCache<NpcDefinition> npcLoader;
-	
+
 	private int[] target_models = null;
 
 	public PrisonPete(RandomContext ctx) {
 		super(ctx);
-		this.npcLoader = ctx.definitions.getLoader(NpcDefinition.class);
 	}
-	
+
 	private enum Balloon {
-		
+
 		SKINNY_STRAIGHT_TAIL(10750, 10736),
 		FAT_NO_HORNS(10751, 10737),
 		SKINNY_BOBBED_TAIL(11028, 16034),
 		FAT_WITH_HORNS(11034, 27098);
-		
+
 		private int model_id;
 		private int[] model_ids;
-		
+
 		private Balloon(int model_id, int... model_ids) {
 			this.model_id = model_id;
 			this.model_ids = model_ids;
 		}
-		
+
 		@Override
 		public String toString() {
 			return name().substring(0, 1) + name().substring(1).toLowerCase();
 		}
-		
+
 	}
-	
+
 	@Override
 	public boolean valid() {
 		return !ctx.npcs.select().name(balloon_animal).isEmpty() || ctx.randomMethods.getNpc("Prison Pete").valid();
@@ -138,12 +132,12 @@ public class PrisonPete extends OSRandom {
 				if (lever.inViewport()) {
 					if (lever.interact(Menu.filter("Pull", "Lever"))) {
 						Condition.wait(new Callable<Boolean>() {
-	
+
 							@Override
 							public Boolean call() throws Exception {
 								return model_component.valid();
 							}
-	
+
 						});
 					}
 				}
@@ -157,12 +151,12 @@ public class PrisonPete extends OSRandom {
 				target.set(balloon);
 				if (balloon.interact(Menu.filter("Pop", "Balloon Animal"))) {
 					Condition.wait(new Callable<Boolean>() {
-	
+
 						@Override
 						public Boolean call() throws Exception {
 							return !ctx.inventory.select().id(key_id).isEmpty();
 						}
-	
+
 					});
 				}
 				return;

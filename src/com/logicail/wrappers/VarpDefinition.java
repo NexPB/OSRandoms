@@ -1,6 +1,8 @@
 package com.logicail.wrappers;
 
+import com.logicail.wrappers.loaders.ScriptDefinitionLoader;
 import com.sk.datastream.Stream;
+import org.powerbot.script.rt4.ClientContext;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,15 +25,15 @@ public class VarpDefinition extends Definition {
 	public int configId = -1;
 	public int lowerBitIndex = -1;
 	public int upperBitIndex = -1;
+	public int mask = -1;
 
-	public VarpDefinition(int id, Stream stream) {
-		super(id);
-		decode(stream);
+	public VarpDefinition(ScriptDefinitionLoader loader, int id) {
+		super(loader, id);
 	}
 
 	@Override
 	public String toString() {
-		return "ScriptDef " + id + " => ctx.varpbits.varpbit(" + configId + ", " + lowerBitIndex + ", 0x" + Integer.toHexString(MASKS[upperBitIndex - lowerBitIndex]) + ")";
+		return "ScriptDef " + id + " => ctx.varpbits.varpbit(" + configId + ", " + lowerBitIndex + ", 0x" + Integer.toHexString(mask) + ")";
 	}
 
 	@Override
@@ -40,8 +42,13 @@ public class VarpDefinition extends Definition {
 			configId = stream.getUShort();
 			lowerBitIndex = stream.getUByte();
 			upperBitIndex = stream.getUByte();
+			mask = MASKS[upperBitIndex - lowerBitIndex];
 		} else {
 			throw new IllegalArgumentException("Unknown opcode " + opcode);
 		}
+	}
+
+	public int execute(ClientContext ctx) {
+		return ctx.varpbits.varpbit(configId) >> lowerBitIndex & mask;
 	}
 }
