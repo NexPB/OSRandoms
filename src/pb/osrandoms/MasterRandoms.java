@@ -28,13 +28,20 @@ public class MasterRandoms extends GraphScript<RandomContext> implements PaintLi
 	@Override
 	public void repaint(Graphics g) {
 		g.setFont(new Font("Tahoma", 0, 14));
-		final OSRandom action = (OSRandom) this.current.get();
+		final Action<RandomContext> action = this.current.get();
 		if (action != null) {
-			action.repaint(g);
-			g.setColor(Color.WHITE);
-			g.drawString("Active random: " + action.name(), 10, 45);
-			g.drawString("Status: " + action.status(), 10, 60);
+			if (action instanceof OSRandom) {
+				OSRandom random = (OSRandom) action;
+				random.repaint(g);
+				g.setColor(Color.WHITE);
+				g.drawString("Active random: " + random.name(), 10, 45);
+				g.drawString("Status: " + random.status(), 10, 60);
+
+				final Point location = ctx.input.getLocation();
+				g.setColor(new Color(0, 255, 255));
+				g.drawLine(location.x - 6, location.y - 6, location.x + 6, location.y + 6);
+				g.drawLine(location.x + 6, location.y - 6, location.x - 6, location.y + 6);
+			}
 		}
 	}
-
 }
